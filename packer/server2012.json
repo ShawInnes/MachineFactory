@@ -6,6 +6,7 @@
       "iso_checksum": "af6a7f966b4c4e31da5bc3cdc3afcbec",
       "iso_checksum_type": "md5",
       "guest_os_type": "windows8srv-64",
+      "tools_upload_flavor": "windows",
       "headless": false,
       "boot_wait": "3m",
       "winrm_username": "packer",
