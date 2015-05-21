@@ -12,27 +12,29 @@ Vagrant.configure(2) do |config|
 
   config.vm.box = "../boxes/windows_2012_r2_vmware.box"
 
-  config.vm.name = "server.dev"
+  config.vm.hostname = "servervm"
 
-  config.winrm.host = "server.dev"
-  config.winrm.port = 5985
-  config.winrm.guest_port = 5985
   config.vm.guest = :windows
   config.vm.communicator = "winrm"
+
+  config.winrm.port = 5985
+  config.winrm.guest_port = 5985
+  config.winrm.username = "vagrant"
+  config.winrm.password = "vagrant"
+
   config.vm.network :forwarded_port,   guest: 3389, host: 3399,       id: "rdp",   auto_correct: false
   config.vm.network :forwarded_port,   guest: 5985, host: 5985,       id: "winrm", auto_correct: false
-  config.vm.network :forwarded_port,   guest: 80,   host: 8000,       id: "web" # Port forward for IIS
-  config.vm.network :forwarded_port,   guest: 443,  host: 8443,       id: "ssl" # Port forward for SSL IIS
-  config.vm.network :forwarded_port,   guest: 4018, host: 4018,       id: "remotevsdebug"
+  # config.vm.network :forwarded_port,   guest: 80,   host: 8000,       id: "web" # Port forward for IIS
+  # config.vm.network :forwarded_port,   guest: 443,  host: 8443,       id: "ssl" # Port forward for SSL IIS
+  # config.vm.network :forwarded_port,   guest: 4018, host: 4018,       id: "remotevsdebug"
 
   config.vm.provider "vmware_fusion" do |v|
     v.gui = true
     v.vmx["memsize"] = "2048"
     v.vmx["numvcpus"] = "2"
-    v.vmx["RemoteDisplay.vnc.enabled"] = "false"
-    v.vmx["RemoteDisplay.vnc.port"] = "5900"
-    v.vmx["virtualhw.version"] = "9"
     v.vmx["ethernet0.vnet"] = "vmnet3"
+    v.vmx["ethernet0.virtualdev"] = "vmnet3"
+    v.vmx["ethernet0.startConnected"] = "true"
   end  
 
   config.vm.synced_folder ".", "/vagrant", type: "rsync",
@@ -56,7 +58,7 @@ Vagrant.configure(2) do |config|
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
   # your network.
-  config.vm.network "public_network"
+  # config.vm.network "public_network"
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
