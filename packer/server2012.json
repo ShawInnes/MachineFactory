@@ -1,6 +1,6 @@
 {
   "variables": {
-    "version": "1.0.3"
+    "version": "1.0.4"
   },
     "builders": [{
       "type": "vmware-windows-iso",
@@ -9,8 +9,6 @@
       "iso_checksum": "af6a7f966b4c4e31da5bc3cdc3afcbec",
       "iso_checksum_type": "md5",
       "guest_os_type": "windows8srv-64",
-      "tools_upload_flavor": "windows",
-      "tools_upload_path": "/Users/packer/{{.Flavor}}.iso",
       "headless": false,
       "boot_wait": "3m",
       "winrm_username": "packer",
