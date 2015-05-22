@@ -10,7 +10,7 @@ Vagrant.configure(2) do |config|
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
-  config.vm.box = "../boxes/windows_2012_r2_vmware.box"
+  config.vm.box = "../boxes/windows_2012_r2.1.0.2.box"
 
   config.vm.hostname = "servervm"
 
@@ -62,4 +62,11 @@ Vagrant.configure(2) do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
+
+$script = <<SCRIPT
+Mount-DiskImage -ImagePath c:\\Users\\packer\\windows.iso
+& E:\\Setup.exe /S /v`"/qn REBOOT=R`" | Out-Host
+SCRIPT
+
+  config.vm.provision :shell, inline: $script 
 end

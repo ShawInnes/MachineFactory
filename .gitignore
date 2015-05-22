@@ -1,2 +1,4 @@
 *.box
+*.exe
 .vagrant/
+packer_cache/
