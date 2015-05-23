@@ -15,10 +15,11 @@
       "winrm_password": "packer",
       "winrm_wait_timeout": "10m",
       "shutdown_timeout": "1h",
-      "shutdown_command": "c:/windows/system32/sysprep/sysprep.exe /generalize /oobe /quiet /shutdown /unattend:a:/unattend.xml",
+      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
       "disk_size": 20000,
       "floppy_files": [
         "windows_2012_r2/Autounattend.xml",
+        "windows_2012_r2/unattend.xml",
         "scripts/init.bat",
         "scripts/enable-winrm.bat"
       ],
@@ -54,8 +55,7 @@
       "type":"powershell",
       "inline": [
         "(iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1')))>$null 2>&1",
-        "choco feature enable -n=allowGlobalConfirmation",
-        "# choco install powershell -pre"
+        "choco feature enable -n=allowGlobalConfirmation"
       ]
     }
     ],

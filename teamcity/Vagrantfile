@@ -1,0 +1,23 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.provider "vmware_fusion" do |v|
+    v.gui = true
+    v.vmx["memsize"] = "2048"
+    v.vmx["numvcpus"] = "2"
+    v.vmx["ethernet0.virtualDev"] = "e1000"
+    v.vmx["ethernet0.connectionType"] = "nat"
+  end 
+
+  config.vm.box = "hashicorp/precise64"
+  config.vm.network :forwarded_port, guest: 8111, host: 9000
+
+  config.vm.provision "shell", inline: "sudo apt-get update -y"
+  config.vm.provision "shell", inline: "sudo apt-get install openjdk-7-jre-headless -y"
+  config.vm.provision "shell", inline: "tar -xvzf TeamCity-9.0.4.tar.gz"
+  config.vm.provision "shell", inline: "export TEAMCITY_DATA_PATH=\"/var/TeamCity/.BuildServer\""
+  config.vm.provision "shell", inline: "sudo mkdir -p /home/vagrant/TeamCity/logs"
+  config.vm.provision "shell", inline: "sudo chown vagrant:vagrant /home/vagrant/TeamCity/ -R"
+  config.vm.provision "shell", inline: "/home/vagrant/TeamCity/bin/teamcity-server.sh start"
+end

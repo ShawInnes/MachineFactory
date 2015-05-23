@@ -1,6 +1,9 @@
 *.box
+*.tar.gz
 *.exe
+
 .DS_Store
 .vagrant/
 packer_cache/
+chocolatey/
 output-vmware-windows-iso/

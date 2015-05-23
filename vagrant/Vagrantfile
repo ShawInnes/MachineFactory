@@ -34,30 +34,99 @@ Vagrant.configure(2) do |config|
     v.vmx["gui.fitguestusingnativedisplayresolution"] = "FALSE"
   end  
 
-  # config.vm.synced_folder ".", "/vagrant"
-
-  # Disable automatic box update checking. If you disable this, then
-  # boxes will only be checked for updates when the user runs
-  # `vagrant box outdated`. This is not recommended.
-  # config.vm.box_check_update = false
-
-  # Create a forwarded port mapping which allows access to a specific port
-  # within the machine from a port on the host machine. In the example below,
-  # accessing "localhost:8080" will access port 80 on the guest machine.
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
-
-  # Create a private network, which allows host-only access to the machine
-  # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
-
-  # Create a public network, which generally matched to bridged network.
-  # Bridged networks make the machine appear as another physical device on
-  # your network.
   config.vm.network "public_network"
 
-  # Share an additional folder to the guest VM. The first argument is
-  # the path on the host to the actual folder. The second argument is
-  # the path on the guest to mount the folder. And the optional third
-  # argument is a set of non-required options.
-  # config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.provision "proxy", type: "shell" do |s|
+    s.path = "scripts/proxy-disable.ps1"
+  end
+ 
+  config.vm.provision "wmf", type: "shell" do |s|
+$script = <<SCRIPT
+    $configContent = Get-Content ${env:ProgramData}\\Chocolatey\\config\\chocolatey.config | ForEach-Object { $_ -replace "<cacheLocation />", "<cacheLocation>\\vagrant</cacheLocation>" }
+    Set-Content ${env:ProgramData}\\Chocolatey\\config\\chocolatey.config -Value $configContent
+
+    choco upgrade powershell --pre
+
+    Restart-Computer -Force
+SCRIPT
+
+    s.inline = $script
+  end
+
+  config.vm.provision "dev", type: "shell" do |s|
+$script = <<SCRIPT
+    choco install notepadplusplus
+    choco install git.install
+    choco install googlechrome
+SCRIPT
+
+    s.inline = $script
+  end
+
+  config.vm.provision "psget", type: "shell" do |s|
+$script = <<SCRIPT
+    # Get-PackageProvider -Name NuGet -ForceBootstrap
+
+    # Register-PsRepository -Name PSGallery -SourceLocation http://www.powershellgallery.com/api/v2/
+    # Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+
+    Write-Output "Installing DSC Module xNetworking"
+    Install-Module -Name xNetworking -Repository PSGallery
+
+    Write-Output "Installing DSC Module xPSDesiredStateConfiguration"
+    Install-Module -Name xPSDesiredStateConfiguration -Repository PSGallery
+
+    Write-Output "Installing DSC Module xWebAdministration"
+    Install-Module -Name xWebAdministration -Repository PSGallery
+
+    Write-Output "Installing DSC Module xSystemSecurity"
+    Install-Module -Name xSystemSecurity -Repository PSGallery
+
+    Write-Output "Installing DSC Module xTimeZone"
+    Install-Module -Name xTimeZone -Repository PSGallery
+SCRIPT
+
+    s.inline = $script
+  end
+
+  config.vm.provision "octopus", type: "shell" do |s|
+$script = <<SCRIPT
+    choco install octopusdeploy
+    choco install octopusdeploy.tentacle
+    choco install octopustools
+SCRIPT
+
+    s.inline = $script
+  end
+
+  config.vm.provision "octopus-server", type: "shell" do |s|
+    s.path = "scripts/octopus-server.ps1"
+  end
+
+  config.vm.provision "octopus-tentacle", type: "shell" do |s|
+    s.path = "scripts/octopus-tentacle.ps1"
+  end
+
+  config.vm.provision "dsc", type: "dsc" do |dsc|
+    dsc.manifests_path = "manifests" 
+    dsc.configuration_file = "MyWebsite.ps1"
+    dsc.configuration_data_file  = "manifests/MyConfig.psd1"
+    dsc.configuration_name = "MyWebsite"
+    dsc.configuration_params = {"-MachineName" => "localhost"}
+    dsc.temp_dir = "c:/tmp/vagrant-dsc"
+  end 
+
+  config.vm.provision "dsc-tentacle", type: "dsc" do |dsc|
+    dsc.manifests_path = "manifests" 
+    dsc.configuration_file = "MyOctopus.ps1"
+    dsc.configuration_data_file  = "manifests/MyConfig.psd1"
+    dsc.configuration_name = "MyOctopus"
+    dsc.configuration_params = {
+      "-ApiKey" => "API-ABCDEF1234567791",
+      "-OctopusServerUrl" => "http://localhost/",
+      "-Environments" => "@(\"Development\")",
+      "-Roles" => "@(\"web-server\")"
+    }
+    dsc.temp_dir = "c:/tmp/vagrant-dsc"
+  end 
 end
