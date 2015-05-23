@@ -1,6 +1,6 @@
 {
   "variables": {
-    "version": "1.0.6"
+    "version": "1.0.7"
   },
     "builders": [{
       "type": "vmware-windows-iso",
@@ -46,11 +46,11 @@
     {
       "type":"powershell",
       "inline": [
-        "& \\Tools\\VMware-tools-9.4.12-2627939-x86_64.exe /S /v`"/qn REBOOT=R`"
+        "& \\Tools\\VMware-tools-9.4.12-2627939-x86_64.exe /S /v`\"/qn REBOOT=R`\""
       ]
     },
     {
-      "pause_before": "10s",
+      "pause_before": "20s",
       "type":"powershell",
       "inline": [
         "(iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1')))>$null 2>&1",
