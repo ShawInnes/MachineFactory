@@ -1,6 +1,6 @@
 {
   "variables": {
-    "version": "1.0.4"
+    "version": "1.0.5"
   },
     "builders": [{
       "type": "vmware-windows-iso",
@@ -46,16 +46,17 @@
     {
       "type":"powershell",
       "inline": [
-        "(iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1')))>$null 2>&1",
-        "choco feature enable -n=allowGlobalConfirmation"
+        "& \\Tools\\VMware-tools-9.4.12-2627939-x86_64.exe /s /v /qn"
       ]
-    },
+    }
     {
       "type":"powershell",
       "inline": [
-        "& \\Tools\\VMware-tools-9.4.12-2627939-x86_64.exe /S /v /qn"
+        "(iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1')))>$null 2>&1",
+        "choco feature enable -n=allowGlobalConfirmation"
       ]
-    }],
+    }
+    ],
     "post-processors": [{
       "type": "vagrant",
       "output": "../boxes/windows_2012_r2-{{user `version`}}.box",
