@@ -10,14 +10,37 @@ Vagrant.configure("2") do |config|
     v.vmx["ethernet0.connectionType"] = "nat"
   end 
 
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.include_offline = true
+
+  config.vm.hostname = "teamcity.devops"
+
   config.vm.box = "hashicorp/precise64"
   config.vm.network :forwarded_port, guest: 8111, host: 9000
 
-  config.vm.provision "shell", inline: "sudo apt-get update -y"
-  config.vm.provision "shell", inline: "sudo apt-get install openjdk-7-jre-headless -y"
-  config.vm.provision "shell", inline: "tar -xvzf TeamCity-9.0.4.tar.gz"
-  config.vm.provision "shell", inline: "export TEAMCITY_DATA_PATH=\"/var/TeamCity/.BuildServer\""
-  config.vm.provision "shell", inline: "sudo mkdir -p /home/vagrant/TeamCity/logs"
-  config.vm.provision "shell", inline: "sudo chown vagrant:vagrant /home/vagrant/TeamCity/ -R"
-  config.vm.provision "shell", inline: "/home/vagrant/TeamCity/bin/teamcity-server.sh start"
+  config.vm.provision "base", type: "shell" do |s|
+$script = <<SCRIPT 
+  sudo apt-get update -y
+  sudo apt-get install openjdk-7-jre-headless -y
+SCRIPT
+
+    s.inline = $script
+  end
+
+  config.vm.provision "teamcity", type: "shell" do |s|
+$script = <<SCRIPT 
+  tar -xvzf /vagrant/TeamCity-9.0.4.tar.gz
+
+  export TEAMCITY_DATA_PATH=\"/var/TeamCity/.BuildServer\"
+
+  sudo mkdir -p /home/vagrant/TeamCity/logs
+  sudo chown vagrant:vagrant -R /home/vagrant/TeamCity/
+
+  /home/vagrant/TeamCity/bin/teamcity-server.sh start
+SCRIPT
+
+    s.inline = $script
+  end
+
 end

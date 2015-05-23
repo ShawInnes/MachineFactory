@@ -9,6 +9,7 @@ brew cask install intellij-idea
 brew cask install vagrant
 vagrant plugin install vagrant-vmware-fusion
 vagrant plugin install vagrant-dsc
+vagrant plugin install vagrant-hostmanager
 
 brew install nodejs
 npm install azure-cli -g
