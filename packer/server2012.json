@@ -1,6 +1,6 @@
 {
   "variables": {
-    "version": "1.0.5"
+    "version": "1.0.6"
   },
     "builders": [{
       "type": "vmware-windows-iso",
@@ -15,7 +15,7 @@
       "winrm_password": "packer",
       "winrm_wait_timeout": "10m",
       "shutdown_timeout": "1h",
-      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+      "shutdown_command": "c:/windows/system32/sysprep/sysprep.exe /generalize /oobe /quiet /shutdown /unattend:a:/unattend.xml",
       "disk_size": 20000,
       "floppy_files": [
         "windows_2012_r2/Autounattend.xml",
@@ -46,14 +46,16 @@
     {
       "type":"powershell",
       "inline": [
-        "& \\Tools\\VMware-tools-9.4.12-2627939-x86_64.exe /s /v /qn"
+        "& \\Tools\\VMware-tools-9.4.12-2627939-x86_64.exe /S /v`"/qn REBOOT=R`"
       ]
-    }
+    },
     {
+      "pause_before": "10s",
       "type":"powershell",
       "inline": [
         "(iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1')))>$null 2>&1",
-        "choco feature enable -n=allowGlobalConfirmation"
+        "choco feature enable -n=allowGlobalConfirmation",
+        "# choco install powershell -pre"
       ]
     }
     ],

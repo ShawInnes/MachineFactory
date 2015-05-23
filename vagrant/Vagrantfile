@@ -10,7 +10,7 @@ Vagrant.configure(2) do |config|
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
-  config.vm.box = "../boxes/windows_2012_r2.1.0.2.box"
+  config.vm.box = "../boxes/windows_2012_r2-1.0.5.box"
 
   config.vm.hostname = "servervm"
 
@@ -36,7 +36,7 @@ Vagrant.configure(2) do |config|
     v.vmx["ethernet0.connectionType"] = "nat"
   end  
 
-  config.vm.synced_folder ".", "/vagrant"
+  # config.vm.synced_folder ".", "/vagrant"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -64,8 +64,7 @@ Vagrant.configure(2) do |config|
   # config.vm.synced_folder "../data", "/vagrant_data"
 
 $script = <<SCRIPT
-Mount-DiskImage -ImagePath c:\\Users\\packer\\windows.iso
-& E:\\Setup.exe /S /v`"/qn REBOOT=R`" | Out-Host
+& \\Tools\\VMware-tools-9.4.12-2627939-x86_64.exe /s /v /qn | Out-Host
 SCRIPT
 
   config.vm.provision :shell, inline: $script 
