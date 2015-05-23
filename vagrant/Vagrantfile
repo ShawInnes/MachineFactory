@@ -10,7 +10,7 @@ Vagrant.configure(2) do |config|
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
-  config.vm.box = "../boxes/windows_2012_r2-1.0.5.box"
+  config.vm.box = "../boxes/windows_2012_r2-1.0.6.box"
 
   config.vm.hostname = "servervm"
 
@@ -24,9 +24,6 @@ Vagrant.configure(2) do |config|
 
   config.vm.network :forwarded_port,   guest: 3389, host: 3399,       id: "rdp",   auto_correct: false
   config.vm.network :forwarded_port,   guest: 5985, host: 5985,       id: "winrm", auto_correct: false
-  # config.vm.network :forwarded_port,   guest: 80,   host: 8000,       id: "web" # Port forward for IIS
-  # config.vm.network :forwarded_port,   guest: 443,  host: 8443,       id: "ssl" # Port forward for SSL IIS
-  # config.vm.network :forwarded_port,   guest: 4018, host: 4018,       id: "remotevsdebug"
 
   config.vm.provider "vmware_fusion" do |v|
     v.gui = true
@@ -34,6 +31,7 @@ Vagrant.configure(2) do |config|
     v.vmx["numvcpus"] = "2"
     v.vmx["ethernet0.virtualDev"] = "e1000"
     v.vmx["ethernet0.connectionType"] = "nat"
+    v.vmx["gui.fitguestusingnativedisplayresolution"] = "FALSE"
   end  
 
   # config.vm.synced_folder ".", "/vagrant"
@@ -62,10 +60,4 @@ Vagrant.configure(2) do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
-
-$script = <<SCRIPT
-& \\Tools\\VMware-tools-9.4.12-2627939-x86_64.exe /s /v /qn | Out-Host
-SCRIPT
-
-  config.vm.provision :shell, inline: $script 
 end
