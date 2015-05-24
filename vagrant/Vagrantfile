@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
   config.hostmanager.manage_host = true
   config.hostmanager.include_offline = true
 
-  config.vm.box = "../boxes/windows_2012_r2-1.0.6.box"
+  config.vm.box = "../boxes/windows_2012_r2-1.0.7.box"
 
   config.vm.hostname = "octopus.devops"
 
@@ -30,9 +30,6 @@ Vagrant.configure(2) do |config|
     v.vmx["ethernet0.virtualDev"] = "e1000"
     v.vmx["ethernet0.connectionType"] = "nat"
     v.vmx["gui.fitguestusingnativedisplayresolution"] = "FALSE"
-    v.vmx["ide1:0.devicetype"] = "cdrom-image"
-    v.vmx["ide1:0.filename"] = "../../ISO/en_visual_studio_ultimate_2013_with_update_4_x86_dvd_5935075.iso"
-    v.vmx["ide1:0.present"] = "TRUE"
   end  
 
   config.vm.provision "proxy", type: "shell" do |s|
@@ -43,10 +40,6 @@ Vagrant.configure(2) do |config|
 $script = <<SCRIPT
     $configContent = Get-Content ${env:ProgramData}\\Chocolatey\\config\\chocolatey.config | ForEach-Object { $_ -replace "<cacheLocation />", "<cacheLocation>\\vagrant</cacheLocation>" }
     Set-Content ${env:ProgramData}\\Chocolatey\\config\\chocolatey.config -Value $configContent
-
-    choco upgrade powershell --pre
-
-    Restart-Computer -Force
 SCRIPT
 
     s.inline = $script
