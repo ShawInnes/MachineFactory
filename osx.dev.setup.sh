@@ -4,6 +4,7 @@ brew install caskroom/cask/brew-cask
 
 brew cask install alfred
 brew cask install vlc
+brew cask install chefdk
 brew cask install intellij-idea
 
 brew cask install vagrant

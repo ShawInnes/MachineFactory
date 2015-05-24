@@ -20,8 +20,9 @@ Vagrant.configure(2) do |config|
   config.vm.communicator = :winrm
   config.vm.network :public_network
 
-  # config.vm.network :forwarded_port,   guest: 3389, host: 3399,       id: "rdp",   auto_correct: false
-  # config.vm.network :forwarded_port,   guest: 5985, host: 5985,       id: "winrm", auto_correct: false
+  config.vm.network :forwarded_port,   guest: 3389, host: 3389,       id: "rdp",   auto_correct: false
+  config.vm.network :forwarded_port,   guest: 5985, host: 5985,       id: "winrm", auto_correct: false
+
   config.vm.provider "vmware_fusion" do |v|
     v.gui = true
     v.vmx["memsize"] = "2048"
@@ -29,6 +30,9 @@ Vagrant.configure(2) do |config|
     v.vmx["ethernet0.virtualDev"] = "e1000"
     v.vmx["ethernet0.connectionType"] = "nat"
     v.vmx["gui.fitguestusingnativedisplayresolution"] = "FALSE"
+    v.vmx["ide1:0.devicetype"] = "cdrom-image"
+    v.vmx["ide1:0.filename"] = "../../ISO/en_visual_studio_ultimate_2013_with_update_4_x86_dvd_5935075.iso"
+    v.vmx["ide1:0.present"] = "TRUE"
   end  
 
   config.vm.provision "proxy", type: "shell" do |s|
@@ -100,26 +104,4 @@ SCRIPT
   config.vm.provision "octopus-tentacle", type: "shell" do |s|
     s.path = "scripts/octopus-tentacle.ps1"
   end
-
-  config.vm.provision "dsc", type: "dsc" do |dsc|
-    dsc.manifests_path = "manifests" 
-    dsc.configuration_file = "MyWebsite.ps1"
-    dsc.configuration_data_file  = "manifests/MyConfig.psd1"
-    dsc.configuration_name = "MyWebsite"
-    dsc.configuration_params = {"-MachineName" => "localhost"}
-  end 
-
-  config.vm.provision "dsc-tentacle", type: "dsc" do |dsc|
-    dsc.manifests_path = "manifests" 
-    dsc.temp_dir = "/tmp/dsc"
-    dsc.configuration_file = "MyOctopus.ps1"
-    dsc.configuration_data_file  = "manifests/MyConfig.psd1"
-    dsc.configuration_name = "MyOctopus"
-    dsc.configuration_params = {
-      "-ApiKey" => "API-ABCDEF1234567791",
-      "-OctopusServerUrl" => "http://localhost/",
-      "-Environments" => "@(\"Development\")",
-      "-Roles" => "@(\"web-server\")"
-    }
-  end 
 end
