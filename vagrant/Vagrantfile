@@ -12,9 +12,9 @@ Vagrant.configure(2) do |config|
   config.hostmanager.manage_host = true
   config.hostmanager.include_offline = true
 
-  config.vm.box = "../boxes/windows_2012_r2-1.0.7.box"
+  config.vm.box = "../boxes/windows_2012_r2-1.0.8.box"
 
-  config.vm.hostname = "octopus.devops"
+  config.vm.hostname = "octopus"
 
   config.vm.guest = :windows
   config.vm.communicator = :winrm
@@ -32,49 +32,27 @@ Vagrant.configure(2) do |config|
     v.vmx["gui.fitguestusingnativedisplayresolution"] = "FALSE"
   end  
 
-  config.vm.provision "proxy", type: "shell" do |s|
+  config.vm.provision "noproxy", type: "shell" do |s|
     s.path = "scripts/proxy-disable.ps1"
   end
  
-  config.vm.provision "wmf", type: "shell" do |s|
-$script = <<SCRIPT
-    $configContent = Get-Content ${env:ProgramData}\\Chocolatey\\config\\chocolatey.config | ForEach-Object { $_ -replace "<cacheLocation />", "<cacheLocation>\\vagrant</cacheLocation>" }
-    Set-Content ${env:ProgramData}\\Chocolatey\\config\\chocolatey.config -Value $configContent
-SCRIPT
-
-    s.inline = $script
+  config.vm.provision "chocolatey", type: "shell" do |s|
+    s.path = "scripts/chocolatey-cache.ps1"
   end
 
-  config.vm.provision "dev", type: "shell" do |s|
+  config.vm.provision "wmf5", type: "shell" do |s|
+    s.path = "scripts/powershell-wmf5.ps1"
+  end
+
+  config.vm.provision "psget", type: "shell" do |s|
+    s.path = "scripts/powershell-psget.ps1"
+  end
+
+  config.vm.provision "devtools", type: "shell" do |s|
 $script = <<SCRIPT
     choco install notepadplusplus
     choco install git.install
     choco install googlechrome
-SCRIPT
-
-    s.inline = $script
-  end
-
-  config.vm.provision "psget", type: "shell" do |s|
-$script = <<SCRIPT
-    Get-PackageProvider -Name NuGet -ForceBootstrap
-    Register-PsRepository -Name PSGallery -SourceLocation http://www.powershellgallery.com/api/v2/
-    Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-
-    Write-Output "Installing DSC Module xNetworking"
-    Install-Module -Name xNetworking -Repository PSGallery
-
-    Write-Output "Installing DSC Module xPSDesiredStateConfiguration"
-    Install-Module -Name xPSDesiredStateConfiguration -Repository PSGallery
-
-    Write-Output "Installing DSC Module xWebAdministration"
-    Install-Module -Name xWebAdministration -Repository PSGallery
-
-    Write-Output "Installing DSC Module xSystemSecurity"
-    Install-Module -Name xSystemSecurity -Repository PSGallery
-
-    Write-Output "Installing DSC Module xTimeZone"
-    Install-Module -Name xTimeZone -Repository PSGallery
 SCRIPT
 
     s.inline = $script

@@ -1,6 +1,6 @@
 {
   "variables": {
-    "version": "1.0.7"
+    "version": "1.0.8"
   },
     "builders": [{
       "type": "vmware-windows-iso",
@@ -42,27 +42,26 @@
     {
       "type": "file",
       "source": "tools/VMware-tools-9.4.12-2627939-x86_64.exe",
-      "destination": "\\Tools\\VMware-tools-9.4.12-2627939-x86_64.exe"
+      "destination": "\\Tools\\vmware-tools-x86_64.exe"
     },
     {
       "type":"powershell",
-      "inline": [
-        "& \\Tools\\VMware-tools-9.4.12-2627939-x86_64.exe /S /v`\"/qn REBOOT=R`\""
+      "scripts": [
+        "scripts/vmware-tools.ps1"
       ]
     },
     {
-      "pause_before": "20s",
+      "pause_before":"3m",
       "type":"powershell",
-      "inline": [
-        "(iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1')))>$null 2>&1",
-        "choco feature enable -n=allowGlobalConfirmation",
-        "choco upgrade powershell --pre"
+      "scripts": [
+        "scripts/chocolatey.ps1"
       ]
     }
     ],
     "post-processors": [{
       "type": "vagrant",
       "output": "../boxes/windows_2012_r2-{{user `version`}}.box",
-      "vagrantfile_template": "windows_2012_r2/Vagrantfile.template"
+      "vagrantfile_template": "windows_2012_r2/Vagrantfile.template",
+      "keep_input_artifact": true
     }]
 }
