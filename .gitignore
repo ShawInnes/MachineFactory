@@ -1,6 +1,9 @@
 *.box
 *.tar.gz
 *.exe
+*.msi
+*.evtx
+*.dpx
 
 .DS_Store
 .vagrant/

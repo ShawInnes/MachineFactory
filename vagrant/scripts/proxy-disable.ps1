@@ -27,6 +27,8 @@ function Disable-AutomaticallyDetectProxySettings
     }
 }
 
+& "c:\Program Files\Internet Explorer\iexplore.exe"
+
 Disable-AutomaticallyDetectProxySettings
 
 Set-Itemproperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Connections" -Name ProxyEnable -Value 0

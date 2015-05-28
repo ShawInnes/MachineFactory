@@ -5,11 +5,11 @@ Vagrant.configure(2) do |config|
   config.winrm.port = 5985
   config.winrm.guest_port = 5985
 
-  config.winrm.username = "packer"
-  config.winrm.password = "packer"
+  config.winrm.username = Secret.winrm_username
+  config.winrm.password = Secret.winrm_password
 
-  config.hostmanager.enabled = true
-  config.hostmanager.manage_host = true
+  config.hostmanager.enabled = false
+  config.hostmanager.manage_host = false
   config.hostmanager.include_offline = true
 
   config.vm.box = "../boxes/windows_2012_r2-1.0.8.box"
@@ -22,6 +22,10 @@ Vagrant.configure(2) do |config|
 
   config.vm.network :forwarded_port,   guest: 3389, host: 3389,       id: "rdp",   auto_correct: false
   config.vm.network :forwarded_port,   guest: 5985, host: 5985,       id: "winrm", auto_correct: false
+
+  config.omnibus.chef_version = :latest
+  config.omnibus.cache_packages = true
+  config.cache.scope = :box
 
   config.vm.provider "vmware_fusion" do |v|
     v.gui = true
@@ -48,31 +52,7 @@ Vagrant.configure(2) do |config|
     s.path = "scripts/powershell-psget.ps1"
   end
 
-  config.vm.provision "devtools", type: "shell" do |s|
-$script = <<SCRIPT
-    choco install notepadplusplus
-    choco install git.install
-    choco install googlechrome
-SCRIPT
-
-    s.inline = $script
-  end
-
-  config.vm.provision "octopus", type: "shell" do |s|
-$script = <<SCRIPT
-    choco install octopusdeploy
-    choco install octopusdeploy.tentacle
-    choco install octopustools
-SCRIPT
-
-    s.inline = $script
-  end
-
-  config.vm.provision "octopus-server", type: "shell" do |s|
-    s.path = "scripts/octopus-server.ps1"
-  end
-
-  config.vm.provision "octopus-tentacle", type: "shell" do |s|
-    s.path = "scripts/octopus-tentacle.ps1"
+  config.vm.provision "chefinstall", type: "shell" do |s|
+    s.inline = "choco install chef-client"
   end
 end

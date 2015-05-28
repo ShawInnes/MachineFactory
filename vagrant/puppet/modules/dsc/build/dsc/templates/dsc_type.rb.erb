@@ -1,0 +1,146 @@
+begin
+  require 'puppet_x/msutter/providers/dsc_configuration_provider'
+  require 'puppet_x/msutter/providers/dsc_mof_provider'
+  require 'puppet_x/msutter/helpers/dsc_type_helpers'
+rescue LoadError => detail
+  require 'pathname'
+  lib_path = Pathname.new(__FILE__).dirname.parent.parent
+  $:.unshift(lib_path)
+  require 'puppet_x/msutter/providers/dsc_configuration_provider'
+  require 'puppet_x/msutter/providers/dsc_mof_provider'
+  require 'puppet_x/msutter/helpers/dsc_type_helpers'
+end
+
+Puppet::Type.newtype(:dsc_<%= resource.friendlyname.downcase %>) do
+
+  include Puppet_x::Msutter::DscTypeHelpers
+
+  provide :dsc_configuration do
+    include Puppet_x::Msutter::DscConfigurationProvider
+  end
+
+  provide :dsc_mof do
+    include Puppet_x::Msutter::DscMofProvider
+  end
+
+  @doc = %q{
+    The DSC <%= resource.friendlyname%> resource type.
+    Originally generated from the following schema.mof file:
+      <%= resource.relative_mof_path %>
+  }
+
+  validate do
+  <%  resource.properties.select{|rp| rp.required? }.each do |property| -%>
+    fail('dsc_<%= property.name.downcase %> is a required attribute') if self[:dsc_<%= property.name.downcase %>].nil?
+  <%  end -%>
+  end
+
+  newparam(:dscmeta_resource_friendly_name) do
+    defaultto "<%= resource.friendlyname %>"
+  end
+
+  newparam(:dscmeta_resource_name) do
+    defaultto "<%= resource.name %>"
+  end
+
+  newparam(:dscmeta_import_resource) do
+    newvalues(true, false)
+
+    munge do |value|
+      value.to_s.downcase.to_bool
+    end
+
+    defaultto true
+  end
+
+  newparam(:dscmeta_module_name) do
+    defaultto "<%= resource.ps_module.name %>"
+  end
+
+  newparam(:dscmeta_module_version) do
+    defaultto "<%= resource.ps_module.version %>"
+  end
+
+  newparam(:name, :namevar => true ) do
+  end
+<%  if resource.ensurable? -%>
+
+  ensurable do
+    defaultvalues
+    defaultto :present
+  end
+<%  end -%>
+
+<%  resource.properties.each do |property| -%>
+  # Name:         <%= property.name %>
+  # Type:         <%= property.type %>
+  # IsMandatory:  <%= property.required? ? 'True' : 'False' %>
+  # Values:       <%= property.values ? property.values : 'None' %>
+  newparam(:dsc_<%= property.name.downcase %><% if property.array? %>, :array_matching => :all<% end %>) do
+<%    if property.description -%>
+    desc "<%= property.description %>"
+<%    end -%>
+<%    if property.required? -%>
+    isrequired
+<%    end -%>
+    validate do |value|
+<%    if property.name.downcase == 'ensure' -%>
+      resource[:ensure] = value.downcase
+<%    end -%>
+<%    case -%>
+<%    when property.array? -%>
+      unless value.kind_of?(Array) || value.kind_of?(String)
+        fail("Invalid value '#{value}'. Should be a string or an array of strings")
+      end
+<%    when property.bool? -%>
+<%    when property.int? -%>
+      unless value.kind_of?(Numeric) || value.to_i.to_s == value || value.to_i >= 0
+          fail("Invalid value #{value}. Should be a signed Integer")
+      end
+<%    when property.uint? -%>
+      unless (value.kind_of?(Numeric) && value >= 0) || (value.to_i.to_s == value && value.to_i >= 0)
+          fail("Invalid value #{value}. Should be a unsigned Integer")
+      end
+<%    else -%>
+      unless value.kind_of?(String)
+        fail("Invalid value '#{value}'. Should be a string")
+      end
+<%    end -%>
+<%    if property.values && property.values.any? -%>
+<%      if property.array? -%>
+      if value.kind_of?(Array)
+        unless ([<%= format_newvalues(property.values) %>] & value).count == value.count
+          fail("Invalid value #{value}. Valid values are <%= property.values.join(', ') %>")
+        end
+      end
+      if value.kind_of?(String)
+        unless [<%= format_newvalues(property.values) %>].include?(value)
+          fail("Invalid value #{value}. Valid values are <%= property.values.join(', ') %>")
+        end
+      end
+<%      else -%>
+      unless [<%= format_newvalues(property.values) %>].include?(value)
+        fail("Invalid value '#{value}'. Valid values are <%= property.values.join(', ') %>")
+      end
+<%      end -%>
+<%    end -%>
+    end
+<%  case -%>
+<%  when property.bool? -%>
+    newvalues(true, false)
+<%  end -%>
+<%    case -%>
+<%    when property.bool? -%>
+    munge do |value|
+      value.to_s.downcase.to_bool
+    end
+<%    when (property.int? || property.uint?) -%>
+    munge do |value|
+      value.to_i
+    end
+<%    else -%>
+<%    end -%>
+  end
+
+<%  end %>
+end
