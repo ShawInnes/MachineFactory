@@ -5,4 +5,3 @@ choco install powershell --pre
 Write-Output "Done"
 
 Restart-Computer -Force
-

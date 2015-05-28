@@ -1,0 +1,57 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure('2') do |config|
+  config.vm.boot_timeout = 1000
+
+  azure_common = Proc.new do |azure, override|
+        override.config.vm.box = 'azure'
+
+        azure.mgmt_endpoint = 'https://management.core.windows.net'
+        azure.mgmt_certificate = Secret.azure_mgmt_certificate
+        azure.subscription_id = Secret.azure_subscription_id
+        azure.storage_acct_name = Secret.azure_storage_acct_name
+
+        azure.vm_image = 'NAME OF THE IMAGE TO USE'
+        azure.vm_user = Secret.azure_vm_user
+        azure.vm_password = Secret.azure_vm_password
+
+        azure.vm_location = 'West US'
+
+        azure.winrm_transport = %w(https)
+  end
+
+  config.vm.define 'first' do |cfg|
+    cfg.vm.provider :azure do |azure, override|
+      azure_common.call azure, override
+      azure.vm_name = 'PROVIDE A NAME FOR YOUR VIRTUAL MACHINE'
+      azure.tcp_endpoints = '3389:53389' # opens the Remote Desktop internal port that listens on public port 53389. Without this, you cannot RDP to a Windows VM.
+      azure.winrm_https_port = 5986
+    end
+  end
+
+  config.vm.define 'second' do |cfg|
+    cfg.vm.provider :azure do |azure, override|
+      do_common_azure_stuff.call azure, override
+      azure.vm_name = 'PROVIDE A NAME FOR YOUR VIRTUAL MACHINE'
+      azure.tcp_endpoints = '3389:53390'
+      azure.winrm_https_port = 5987
+    end
+  end
+
+  config.vm.define 'third' do |cfg|
+    cfg.vm.provider :azure do |azure, override|
+      do_common_azure_stuff.call azure, override
+      azure.vm_name = 'PROVIDE A NAME FOR YOUR VIRTUAL MACHINE'
+      azure.tcp_endpoints = '3389:53391'
+      azure.winrm_https_port = 5988
+    end
+  end
+
+  # Executes powershell on the remote machine and returns the hostname
+  config.vm.provision 'shell', inline: 'hostname'
+end

@@ -13,7 +13,7 @@ vagrant plugin install vagrant-dsc
 vagrant plugin install vagrant-hostmanager
 vagrant plugin install vagrant-secret
 vagrant plugin install vagrant-omnibus
-vagrant plugin install vagrant-cachier
+vagrant plugin install vagrant-proxyconf
 
 brew cask install packer
 brew install https://raw.githubusercontent.com/packer-community/packer-windows-plugins-brew/master/packer-windows-plugins.rb
