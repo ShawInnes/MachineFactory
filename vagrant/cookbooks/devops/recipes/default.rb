@@ -30,3 +30,6 @@ iis_site 'Default Web Site' do
   action [:stop, :delete]
 end
 
+%w{wget notepadplusplus}.each do |pkg|
+  chocolatey pkg
+end

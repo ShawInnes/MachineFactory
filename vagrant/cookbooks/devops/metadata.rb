@@ -8,4 +8,4 @@ version          '0.1.2'
 
 depends          'windows'
 depends          'iis'
-depends          'octopus'
+depends          'chocolatey'
