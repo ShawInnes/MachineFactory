@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# require 'berkshelf/vagrant'
+
 Vagrant.configure(2) do |config|
   config.winrm.port = 5985
   config.winrm.guest_port = 5985
@@ -22,8 +24,6 @@ Vagrant.configure(2) do |config|
 
   config.vm.network :forwarded_port,   guest: 3389, host: 3389,       id: "rdp",   auto_correct: false
   config.vm.network :forwarded_port,   guest: 5985, host: 5985,       id: "winrm", auto_correct: false
-
-  config.omnibus.chef_version = :latest
 
   config.vm.provider "vmware_fusion" do |v|
     v.gui = true
@@ -49,7 +49,11 @@ Vagrant.configure(2) do |config|
     s.path = "scripts/powershell-psget.ps1"
   end
 
-  config.vm.provision "chefinstall", type: "shell" do |s|
-    s.inline = "choco install chef-client"
+  config.omnibus.chef_version = :latest
+  config.berkshelf.enabled = true
+
+  config.vm.provision "chef", type: "chef_solo" do |chef|
+    chef.add_recipe "devops"
+    chef.add_recipe "octopus"
   end
 end

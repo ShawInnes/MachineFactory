@@ -1,0 +1,6 @@
+source "https://supermarket.chef.io"
+
+metadata
+
+cookbook 'windows', '~> 1.37.0'
+cookbook 'iis', '~> 4.1.1'
