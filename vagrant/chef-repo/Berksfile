@@ -1,5 +1,6 @@
 source "https://supermarket.chef.io"
 
 cookbook "devops", path: "cookbooks/devops"
+cookbook "role-octopusserver", path: "cookbooks/role-octopusserver"
 
 cookbook 'octopus',  git: 'https://github.com/Zeroto/octopus-cookbook.git'

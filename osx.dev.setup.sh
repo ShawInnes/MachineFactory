@@ -10,6 +10,7 @@ brew install caskroom/cask/brew-cask
 brew cask install vagrant
 vagrant plugin install vagrant-vmware-fusion
 vagrant plugin install vagrant-winrm
+vagrant plugin install vagrant-azure
 vagrant plugin install vagrant-dsc
 vagrant plugin install vagrant-hostmanager
 vagrant plugin install vagrant-secret

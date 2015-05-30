@@ -1,8 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# require 'berkshelf/vagrant'
-
 Vagrant.configure(2) do |config|
   config.winrm.port = 5985
   config.winrm.guest_port = 5985
@@ -20,7 +18,12 @@ Vagrant.configure(2) do |config|
 
   config.vm.guest = :windows
   config.vm.communicator = :winrm
-  config.vm.network :public_network
+  config.vm.network :private_network
+
+  config.omnibus.chef_version = "11.18.6"
+
+  config.berkshelf.enabled = true
+  config.berkshelf.berksfile_path = "chef-repo/Berksfile"
 
   config.vm.network :forwarded_port,   guest: 3389, host: 3389,       id: "rdp",   auto_correct: false
   config.vm.network :forwarded_port,   guest: 5985, host: 5985,       id: "winrm", auto_correct: false
@@ -33,27 +36,28 @@ Vagrant.configure(2) do |config|
     v.vmx["ethernet0.connectionType"] = "nat"
   end  
 
-  config.vm.provision "noproxy", type: "shell" do |s|
-    s.path = "scripts/proxy-disable.ps1"
+  if Vagrant.has_plugin?("vagrant-proxyconf")
+    # config.proxy.http     = "http://192.168.0.2:3128/"
+    # config.proxy.https    = "http://192.168.0.2:3128/"
+    # config.proxy.no_proxy = "localhost,127.0.0.1,.example.com"
   end
- 
+
+  config.vm.provision "windowsupdate", type: "shell" do |s|
+    s.path = "scripts/windowsupdate-disable.ps1"
+  end
+
   config.vm.provision "chocolatey", type: "shell" do |s|
     s.path = "scripts/chocolatey-cache.ps1"
   end
 
-  config.vm.provision "wmf5", type: "shell" do |s|
-    s.path = "scripts/powershell-wmf5.ps1"
-  end
-
-  config.vm.provision "psget", type: "shell" do |s|
-    s.path = "scripts/powershell-psget.ps1"
-  end
-
-  config.omnibus.chef_version = :latest
-  config.berkshelf.enabled = true
-
   config.vm.provision "chef", type: "chef_solo" do |chef|
-    chef.add_recipe "devops"
-    chef.add_recipe "octopus"
+    chef.cookbooks_path    = "chef-repo/cookbooks"
+    chef.data_bags_path    = "chef-repo/data_bags"
+    chef.environments_path = "chef-repo/environments"
+    chef.roles_path        = "chef-repo/roles"
+
+    # chef.verbose_logging   = true
+
+    chef.add_role "octopusserver"
   end
 end
