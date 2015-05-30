@@ -18,15 +18,15 @@ Vagrant.configure(2) do |config|
 
   config.vm.guest = :windows
   config.vm.communicator = :winrm
-  config.vm.network :private_network
+  config.vm.network :public_network
 
   config.omnibus.chef_version = "11.18.6"
 
   config.berkshelf.enabled = true
   config.berkshelf.berksfile_path = "chef-repo/Berksfile"
 
-  config.vm.network :forwarded_port,   guest: 3389, host: 3389,       id: "rdp",   auto_correct: false
-  config.vm.network :forwarded_port,   guest: 5985, host: 5985,       id: "winrm", auto_correct: false
+  config.vm.network :forwarded_port,   guest: 3389, host: 3389,       id: "rdp",       auto_correct: false
+  config.vm.network :forwarded_port,   guest: 5985, host: 5985,       id: "winrm",     auto_correct: false
 
   config.vm.provider "vmware_fusion" do |v|
     v.gui = true
