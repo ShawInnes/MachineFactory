@@ -14,11 +14,11 @@ Vagrant.configure(2) do |config|
 
   config.vm.box = "../boxes/windows_2012_r2-1.0.8.box"
 
-  config.vm.hostname = "octopus"
+  config.vm.hostname = "server2012r2"
 
   config.vm.guest = :windows
   config.vm.communicator = :winrm
-  config.vm.network :public_network
+  # config.vm.network :public_network
 
   config.omnibus.chef_version = "11.18.6"
 
