@@ -12,15 +12,11 @@ Vagrant.configure(2) do |config|
   config.hostmanager.manage_host = false
   config.hostmanager.include_offline = true
 
-  config.vm.box = "../boxes/windows_2012_r2-1.0.8.box"
-
-  config.vm.hostname = "server2012r2"
-
   config.vm.guest = :windows
   config.vm.communicator = :winrm
-  # config.vm.network :public_network
 
-  config.omnibus.chef_version = "11.18.6"
+  # config.vm.network :public_network
+  # config.omnibus.chef_version = "11.18.6"
 
   config.berkshelf.enabled = true
   config.berkshelf.berksfile_path = "chef-repo/Berksfile"
@@ -50,14 +46,33 @@ Vagrant.configure(2) do |config|
     s.path = "scripts/chocolatey-cache.ps1"
   end
 
-  config.vm.provision "chef", type: "chef_solo" do |chef|
-    chef.cookbooks_path    = "chef-repo/cookbooks"
-    chef.data_bags_path    = "chef-repo/data_bags"
-    chef.environments_path = "chef-repo/environments"
-    chef.roles_path        = "chef-repo/roles"
+  config.vm.define "octopus", autostart: true do |octopus|
+    octopus.vm.box = "windows_2012_r2"
+    octopus.vm.box_version = "1.0.8"
+    octopus.vm.hostname = "octopus"
 
-    # chef.verbose_logging   = true
+    config.vm.provision "chef", type: "chef_solo" do |chef|
+      chef.cookbooks_path    = "chef-repo/cookbooks"
+      chef.data_bags_path    = "chef-repo/data_bags"
+      chef.environments_path = "chef-repo/environments"
+      chef.roles_path        = "chef-repo/roles"
 
-    chef.add_role "octopusserver"
+      chef.add_role "octopusserver"
+    end
+  end
+
+  config.vm.define "server", autostart: false do |server|
+    octopus.vm.box = "windows_2012_r2"
+    octopus.vm.box_version = "1.0.8"
+    octopus.vm.hostname = "server"
+
+    config.vm.provision "chef", type: "chef_solo" do |chef|
+      chef.cookbooks_path    = "chef-repo/cookbooks"
+      chef.data_bags_path    = "chef-repo/data_bags"
+      chef.environments_path = "chef-repo/environments"
+      chef.roles_path        = "chef-repo/roles"
+
+      chef.add_role "server"
+    end
   end
 end

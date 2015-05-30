@@ -1,0 +1,11 @@
+{
+  "name": "windows_2012_r2",
+  "description": "This box contains Windows Server 2012R2",
+  "versions": [{
+    "version": "1.0.8",
+    "providers": [{
+      "name": "vmware_desktop",
+      "url": "../boxes/windows_2012_r2-1.0.8.box"
+    }]
+  }]
+}
