@@ -1,0 +1,35 @@
+{
+  "builders": [{
+    "type": "vmware-windows-iso",
+    "vm_name": "windows_impressive",
+    "iso_url": "../../ISO/10074.0.150506-1550.FBL_IMPRESSIVE_SRVR_SERVER_OEM_X64FRE_EN-US.ISO",
+    "iso_checksum": "a3bdaa1e5655efd6fa86b968148f269e",
+    "iso_checksum_type": "md5",
+    "guest_os_type": "windows8srv-64",
+    "headless": false,
+    "boot_wait": "3m",
+    "winrm_username": "packer",
+    "winrm_password": "packer",
+    "winrm_wait_timeout": "10m",
+    "shutdown_timeout": "1h",
+    "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+    "disk_size": 20000,
+    "floppy_files": [
+      "windows_2012_r2/Autounattend.xml",
+      "scripts/init.bat",
+      "scripts/enable-winrm.bat"
+    ],
+    "vmdk_name": "windows_impressive",
+    "vmx_data": {
+      "memsize": "2048",
+      "numvcpus": "2",
+      "scsi0.virtualDev": "lsisas1068"
+    }
+  }],
+  "provisioners": [
+  ],
+  "post-processors": [{
+    "type": "vagrant",
+    "output": "../boxes/windows_impressive.box"
+  }]
+}
