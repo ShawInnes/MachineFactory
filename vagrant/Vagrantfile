@@ -10,26 +10,22 @@ Vagrant.configure(2) do |config|
 
   config.hostmanager.enabled = false
   config.hostmanager.manage_host = false
-  config.hostmanager.include_offline = true
 
   config.vm.guest = :windows
   config.vm.communicator = :winrm
 
-  # config.vm.network :public_network
-  # config.omnibus.chef_version = "11.18.6"
-
   config.berkshelf.enabled = true
   config.berkshelf.berksfile_path = "chef-repo/Berksfile"
 
-  config.vm.network :forwarded_port,   guest: 3389, host: 3389,       id: "rdp",       auto_correct: false
-  config.vm.network :forwarded_port,   guest: 5985, host: 5985,       id: "winrm",     auto_correct: false
+  # config.vm.network :forwarded_port,   guest: 3389, host: 3389,       id: "rdp",       auto_correct: false
+  # config.vm.network :forwarded_port,   guest: 5985, host: 5985,       id: "winrm",     auto_correct: false
 
   config.vm.provider "vmware_fusion" do |v|
     v.gui = true
     v.vmx["memsize"] = "2048"
     v.vmx["numvcpus"] = "2"
-    v.vmx["ethernet0.virtualDev"] = "e1000"
-    v.vmx["ethernet0.connectionType"] = "nat"
+    # v.vmx["ethernet0.virtualDev"] = "e1000"
+    # v.vmx["ethernet0.connectionType"] = "nat"
   end  
 
   if Vagrant.has_plugin?("vagrant-proxyconf")
@@ -48,8 +44,9 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "octopus", autostart: true do |node|
     node.vm.box = "windows_2012_r2"
-    node.vm.box_version = "1.0.8"
     node.vm.hostname = "octopus"
+
+    #node.vm.network :public_network, bridge: "en0"
 
     node.vm.provision "chef", type: "chef_solo" do |chef|
       chef.cookbooks_path    = "chef-repo/cookbooks"
@@ -61,10 +58,11 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  config.vm.define "server", autostart: false do |node|
+  config.vm.define "server", autostart: true do |node|
     node.vm.box = "windows_2012_r2"
-    node.vm.box_version = "1.0.8"
     node.vm.hostname = "server"
+
+    #node.vm.network :public_network, bridge: "en0"
 
     node.vm.provision "chef", type: "chef_solo" do |chef|
       chef.cookbooks_path    = "chef-repo/cookbooks"

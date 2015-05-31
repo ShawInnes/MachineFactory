@@ -25,3 +25,7 @@ brew cask install chefdk
 # wget -c http://packages.vmware.com/tools/esx/5.5latest/windows/x64/VMware-tools-9.4.12-2627939-x86_64.exe -O packer/tools/VMware-tools-9.4.12-2627939-x86_64.exe
 # wget -c https://opscode-omnibus-packages.s3.amazonaws.com/windows/2008r2/x86_64/chef-windows-11.18.6-1.windows.msi -O packer/tools/chef-windows-11.18.6-1.windows.msi
 # wget -c http://download.jetbrains.com/teamcity/TeamCity-9.0.4.tar.gz -O teamcity/TeamCity-9.0.4.tar.gz
+
+## Cleanup Mess: sudo rm /var/db/vmware/vmnet-dhcpd-vmne*
+## VAGRANT_LOG=info
+

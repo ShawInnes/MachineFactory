@@ -1,77 +1,70 @@
 {
-  "variables": {
-    "version": "1.0.9"
-  },
-    "builders": [{
-      "type": "vmware-windows-iso",
-      "vm_name": "windows_2012_r2",
-      "iso_url": "../../ISO/en_windows_server_2012_r2_with_update_x64_dvd_4065220.iso",
-      "iso_checksum": "af6a7f966b4c4e31da5bc3cdc3afcbec",
-      "iso_checksum_type": "md5",
-      "guest_os_type": "windows8srv-64",
-      "headless": false,
-      "boot_wait": "3m",
-      "winrm_username": "packer",
-      "winrm_password": "packer",
-      "winrm_wait_timeout": "10m",
-      "shutdown_timeout": "1h",
-      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
-      "disk_size": 20000,
-      "floppy_files": [
-        "windows_2012_r2/Autounattend.xml",
-        "windows_2012_r2/unattend.xml",
-        "scripts/init.bat",
-        "scripts/enable-winrm.bat"
-      ],
-      "vmdk_name": "windows_server_2012_r2",
-      "vmx_data": {
-        "RemoteDisplay.vnc.enabled": "false",
-        "RemoteDisplay.vnc.port": "5900",
-        "memsize": "2048",
-        "numvcpus": "2",
-        "scsi0.virtualDev": "lsisas1068"
-      }
-    }],
-    "provisioners": [
-    {
-      "type":"powershell",
-      "inline": [
-        "New-Item \\Tools -Type Directory"
-      ]
-    },
-    {
-      "type": "file",
-      "source": "tools/VMware-tools-9.4.12-2627939-x86_64.exe",
-      "destination": "\\Tools\\vmware-tools-x86_64.exe"
-    },
-    {
-      "type": "file",
-      "source": "tools/chef-windows-11.18.6-1.windows.msi",
-      "destination": "\\Tools\\chef-windows.msi"
-    },
-    {
-      "type":"powershell",
-      "scripts": [
-        "scripts/vmware-tools.ps1"
-      ]
-    },
-    {
-      "pause_before":"3m",
-      "type":"powershell",
-      "scripts": [
-        "scripts/chef-windows.ps1"
-      ]
-    },
-    {
-      "type":"powershell",
-      "scripts": [
-        "scripts/chocolatey.ps1"
-      ]
-    }
+  "builders": [{
+    "type": "vmware-windows-iso",
+    "vm_name": "windows_2012_r2",
+    "iso_url": "../../ISO/en_windows_server_2012_r2_with_update_x64_dvd_4065220.iso",
+    "iso_checksum": "af6a7f966b4c4e31da5bc3cdc3afcbec",
+    "iso_checksum_type": "md5",
+    "guest_os_type": "windows8srv-64",
+    "headless": false,
+    "boot_wait": "3m",
+    "winrm_username": "packer",
+    "winrm_password": "packer",
+    "winrm_wait_timeout": "10m",
+    "shutdown_timeout": "1h",
+    "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+    "disk_size": 20000,
+    "floppy_files": [
+      "windows_2012_r2/Autounattend.xml",
+      "scripts/init.bat",
+      "scripts/enable-winrm.bat"
     ],
-    "post-processors": [{
-      "type": "vagrant",
-      "output": "../boxes/windows_2012_r2-{{user `version`}}.box",
-      "vagrantfile_template": "windows_2012_r2/Vagrantfile.template"
-    }]
+    "vmdk_name": "windows_server_2012_r2",
+    "vmx_data": {
+      "memsize": "2048",
+      "numvcpus": "2",
+      "scsi0.virtualDev": "lsisas1068"
+    }
+  }],
+  "provisioners": [
+  {
+    "type":"powershell",
+    "inline": [
+      "New-Item \\Tools -Type Directory"
+    ]
+  },
+  {
+    "type": "file",
+    "source": "tools/VMware-tools-9.4.12-2627939-x86_64.exe",
+    "destination": "\\Tools\\vmware-tools-x86_64.exe"
+  },
+  {
+    "type": "file",
+    "source": "tools/chef-windows-11.18.6-1.windows.msi",
+    "destination": "\\Tools\\chef-windows.msi"
+  },
+  {
+    "type":"powershell",
+    "scripts": [
+      "scripts/vmware-tools.ps1"
+    ]
+  },
+  {
+    "pause_before":"3m",
+    "type":"powershell",
+    "scripts": [
+      "scripts/chef-windows.ps1"
+    ]
+  },
+  {
+    "type":"powershell",
+    "scripts": [
+      "scripts/chocolatey.ps1"
+    ]
+  }
+  ],
+  "post-processors": [{
+    "type": "vagrant",
+    "output": "../boxes/windows_2012_r2.box"
+  }]
 }
