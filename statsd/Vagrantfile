@@ -1,0 +1,45 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "hashicorp/precise64"
+ 
+  config.vm.network :forwarded_port, guest: 80, host: 2280
+  config.vm.network :forwarded_port, guest: 2003, host: 2003
+  config.vm.network :forwarded_port, guest: 8125, host: 8125, :protocol => 'udp'
+  config.vm.network :forwarded_port, guest: 8126, host: 8126, :protocol => 'tcp'
+ 
+  config.vm.network :public_network
+ 
+  # You need to ensure you have the right version of Chef installed on the box
+  # vagrant plugin install vagrant-omnibus
+  # config.omnibus.chef_version = "11.6.0"
+  config.omnibus.chef_version = :latest
+
+  config.berkshelf.enabled = true
+ 
+  # Chef Solo
+  config.vm.provision :chef_solo do |chef|
+    chef.add_recipe "apt"
+    chef.add_recipe "graphite"
+    chef.add_recipe "statsd"
+    chef.add_recipe "vim"
+ 
+    chef.json = {
+      :graphite => {
+        :version => '0.9.9',
+        :python_version => '2.7',
+        :password => "********",
+        :carbon => {
+          :line_receiver_interface => '0.0.0.0'
+        },
+        :whisper => {
+        },
+        :graphite_web => {
+        }
+      },
+      :statsd => {
+        :graphite => {
+          :global_prefix => 'statsd'
+        }
+      }
+    }
+  end
+end

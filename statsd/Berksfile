@@ -1,0 +1,9 @@
+source "https://supermarket.chef.io"
+
+cookbook "apt"
+cookbook "graphite", "0.4.8"
+cookbook "vim"
+ 
+cookbook "statsd",
+  :git => "https://github.com/hectcastro/chef-statsd",
+  :ref => "v1.1.3"
