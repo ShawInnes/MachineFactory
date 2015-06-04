@@ -1,7 +1,7 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "hashicorp/precise64"
  
-  config.vm.network :forwarded_port, guest: 80, host: 2280
+  config.vm.network :forwarded_port, guest: 3000, host: 3000
   config.vm.network :forwarded_port, guest: 2003, host: 2003
   config.vm.network :forwarded_port, guest: 8125, host: 8125, :protocol => 'udp'
   config.vm.network :forwarded_port, guest: 8126, host: 8126, :protocol => 'tcp'
@@ -17,25 +17,16 @@ Vagrant.configure("2") do |config|
  
   # Chef Solo
   config.vm.provision :chef_solo do |chef|
-    chef.add_recipe "apt"
-    chef.add_recipe "graphite"
-    chef.add_recipe "statsd"
-    chef.add_recipe "vim"
+    # chef.add_recipe "apt"
+    chef.add_recipe "graphite::carbon"
+    chef.add_recipe "grafana"
+    # chef.add_recipe "statsd"
  
     chef.json = {
       :graphite => {
-        :version => '0.9.9',
-        :python_version => '2.7',
-        :password => "********",
-        :carbon => {
-          :line_receiver_interface => '0.0.0.0'
-        },
-        :whisper => {
-        },
-        :graphite_web => {
-        }
       },
       :statsd => {
+        :nodejs_bin => '/usr/bin/node',
         :graphite => {
           :global_prefix => 'statsd'
         }
