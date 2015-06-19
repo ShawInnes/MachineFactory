@@ -4,6 +4,10 @@
 *.msi
 *.evtx
 *.dpx
+*.pem
+
+packages/
+trusted_certs/
 
 .DS_Store
 packer_cache/
