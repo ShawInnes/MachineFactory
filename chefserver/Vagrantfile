@@ -17,7 +17,7 @@ Vagrant.configure(2) do |config|
   config.vm.hostname = "chefserver.devops"
 
   config.hostmanager.enabled = true
-  config.hostmanager.manage_host = false
+  config.hostmanager.manage_host = true
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -70,7 +70,7 @@ Vagrant.configure(2) do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "baseinstall", type: "shell", inline: <<-SHELL
-    sudo apt-get update
+    ## sudo apt-get update
     sudo dpkg -i /vagrant/packages/chef-server-core_12.1.0-1_amd64.deb 
   SHELL
 
@@ -86,4 +86,9 @@ Vagrant.configure(2) do |config|
     cp chefdemo-validator.pem /vagrant
   SHELL
 
+  config.vm.provision "webui", type: "shell", inline: <<-SHELL
+    sudo sudo chef-server-ctl install opscode-manage
+    sudo opscode-manage-ctl reconfigure
+    sudo chef-server-ctl reconfigure
+  SHELL
 end
