@@ -9,10 +9,17 @@ Vagrant.configure(2) do |config|
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
+  config.winrm.port = 5985
+  config.winrm.guest_port = 5985
+
+  config.winrm.username = "vagrant"
+  config.winrm.password = "vagrant"
+
+  config.omnibus.chef_version = :latest
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "phusion/ubuntu-14.04-amd64"
+  config.vm.box = "windows2012r2"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -64,28 +71,8 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  config.vm.provision "baseinstall", type: "shell", inline: <<-SHELL
-    sudo apt-get update
-    sudo dpkg -i /vagrant/packages/chef-server-core_12.1.0-1_amd64.deb 
-  SHELL
-
-  config.vm.provision "reconfigure", type: "shell", inline: <<-SHELL
-    sudo chef-server-ctl reconfigure
-  SHELL
-
-  config.vm.provision "init", type: "shell", inline: <<-SHELL
-    sudo chef-server-ctl user-create chefadmin "Chef Admin" chefadmin@devopsnirvana.com Password01 --filename chefadmin.pem
-    sudo chef-server-ctl org-create learningchef "Learning Chef" --association chefadmin --filename learningchef-validator.pem
-
-    cp chefadmin.pem /vagrant
-    cp learningchef-validator.pem /vagrant
-  SHELL
-
-  config.vm.provision "webui", type: "shell", inline: <<-SHELL
-    echo Installing OpsCode Manage...
-    sudo chef-server-ctl install opscode-manage
-
-    sudo opscode-manage-ctl reconfigure
-    sudo chef-server-ctl reconfigure
-  SHELL
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   sudo apt-get update
+  #   sudo apt-get install -y apache2
+  # SHELL
 end
