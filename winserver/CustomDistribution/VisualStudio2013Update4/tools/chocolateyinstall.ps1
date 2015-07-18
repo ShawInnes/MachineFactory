@@ -3,12 +3,14 @@
 # stop on all errors
 $ErrorActionPreference = 'Stop';
 
+$adminFile = (Join-Path $(Split-Path -parent $MyInvocation.MyCommand.Definition) 'AdminDeployment.xml')
 
 $packageName = 'VisualStudio2013Update4' # arbitrary name for the package, used in messages
 $registryUninstallerKeyName = 'VisualStudio2013Update4' #ensure this is the value in the registry
 $installerType = 'EXE' #only one of these: exe, msi, msu
 $url = '\\vmware-host\Shared Folders\ISO\en_visual_studio_ultimate_2013_with_update_4_x86_dvd_5935075.iso' # download url
-$silentArgs = '/Passive /NoRestart' # "/s /S /q /Q /quiet /silent /SILENT /VERYSILENT" # try any of these to get the silent installer #msi is always /quiet
+$silentArgs = '/Passive /NoRestart /AdminFile $adminFile'
+# "/s /S /q /Q /quiet /silent /SILENT /VERYSILENT" # try any of these to get the silent installer #msi is always /quiet
 $validExitCodes = @(0) #please insert other valid exit codes here, exit codes for ms http://msdn.microsoft.com/en-us/library/aa368542(VS.85).aspx
 $toolsDir = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 
