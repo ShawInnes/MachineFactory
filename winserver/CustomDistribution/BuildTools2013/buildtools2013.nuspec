@@ -10,10 +10,10 @@
     <owners>Microsoft</owners>
     <summary>Build Tools 2013</summary>
     <description>Build Tools 2013</description>
-    <projectUrl>none</projectUrl>
+    <projectUrl>http://microsoft.com/</projectUrl>
     <tags>buildtools2013 admin</tags>
     <copyright></copyright>
-    <licenseUrl>none</licenseUrl>
+    <licenseUrl>http://microsoft.com/</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes></releaseNotes>
   </metadata>

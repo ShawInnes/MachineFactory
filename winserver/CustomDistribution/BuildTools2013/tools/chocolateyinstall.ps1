@@ -19,5 +19,5 @@ $toolsDir = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 # add additional optional arguments as necessary
 Install-ChocolateyPackage "$packageName" "$installerType" "$silentArgs" "$url"
 
-Install-ChocolateyPath 'C:\Program Files (x86)\MSBuild\13.0\Bin' 'Machine' # Machine will assert administrative rights
+Install-ChocolateyPath 'C:\Program Files (x86)\MSBuild\12.0\Bin' 'Machine' # Machine will assert administrative rights
 
