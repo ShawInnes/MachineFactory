@@ -1,0 +1,6 @@
+source "https://supermarket.chef.io"
+
+metadata
+
+cookbook 'chocolatey', '~> 0.3.0'
+cookbook 'chef-teamcity', '~> 1.0.0'

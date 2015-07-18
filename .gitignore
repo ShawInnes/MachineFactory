@@ -6,6 +6,8 @@
 *.dpx
 *.pem
 
+*.nupkg
+
 packages/
 trusted_certs/
 
