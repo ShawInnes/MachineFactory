@@ -6,8 +6,6 @@ Vagrant.configure("2") do |config|
     v.gui = true
     v.vmx["memsize"] = "2048"
     v.vmx["numvcpus"] = "2"
-    v.vmx["ethernet0.virtualDev"] = "e1000"
-    v.vmx["ethernet0.connectionType"] = "nat"
   end 
 
   config.hostmanager.enabled = true
@@ -18,7 +16,8 @@ Vagrant.configure("2") do |config|
     node.vm.hostname = "teamcity.devops"
 
     node.vm.box = "hashicorp/precise64"
-    node.vm.network :forwarded_port, guest: 8111, host: 9000
+    # node.vm.network :forwarded_port, guest: 8111, host: 9000
+    node.vm.network :public_network, bridge: "en0"
 
     node.vm.provision "base", type: "shell" do |s|
 $script = <<SCRIPT 
