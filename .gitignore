@@ -1,10 +1,13 @@
 *.box
 *.tar.gz
+*.rpm
 *.exe
 *.msi
 *.evtx
 *.dpx
 *.pem
+
+*.nupkg
 
 packages/
 trusted_certs/

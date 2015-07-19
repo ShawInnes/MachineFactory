@@ -6,29 +6,29 @@ Vagrant.configure("2") do |config|
     v.gui = true
     v.vmx["memsize"] = "2048"
     v.vmx["numvcpus"] = "2"
-    v.vmx["ethernet0.virtualDev"] = "e1000"
-    v.vmx["ethernet0.connectionType"] = "nat"
   end 
 
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
   config.hostmanager.include_offline = true
 
-  config.vm.hostname = "teamcity.devops"
+  config.vm.define "teamcity", autostart: true do |node|
+    node.vm.hostname = "teamcity.devops"
 
-  config.vm.box = "hashicorp/precise64"
-  config.vm.network :forwarded_port, guest: 8111, host: 9000
+    node.vm.box = "hashicorp/precise64"
+    # node.vm.network :forwarded_port, guest: 8111, host: 9000
+    node.vm.network :public_network, bridge: "en0"
 
-  config.vm.provision "base", type: "shell" do |s|
+    node.vm.provision "base", type: "shell" do |s|
 $script = <<SCRIPT 
   sudo apt-get update -y
   sudo apt-get install openjdk-7-jre-headless -y
 SCRIPT
 
-    s.inline = $script
-  end
+      s.inline = $script
+    end
 
-  config.vm.provision "teamcity", type: "shell" do |s|
+    node.vm.provision "teamcity", type: "shell" do |s|
 $script = <<SCRIPT 
   tar -xvzf /vagrant/TeamCity-9.0.4.tar.gz
 
@@ -40,7 +40,8 @@ $script = <<SCRIPT
   /home/vagrant/TeamCity/bin/teamcity-server.sh start
 SCRIPT
 
-    s.inline = $script
+      s.inline = $script
+    end
   end
 
 end

@@ -8,8 +8,9 @@ Vagrant.configure(2) do |config|
   config.winrm.username = Secret.winrm_username
   config.winrm.password = Secret.winrm_password
 
-  config.hostmanager.enabled = false
-  config.hostmanager.manage_host = false
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.include_offline = true
 
   config.vm.guest = :windows
   config.vm.communicator = :winrm
@@ -44,7 +45,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "octopus", autostart: true do |node|
     node.vm.box = "windows_2012_r2"
-    node.vm.hostname = "octopus"
+    node.vm.hostname = "octopus.devops"
 
     #node.vm.network :public_network, bridge: "en0"
 
@@ -55,6 +56,7 @@ Vagrant.configure(2) do |config|
       chef.roles_path        = "chef-repo/roles"
 
       chef.add_role "octopusserver"
+      chef.add_role "teamcityagent"
     end
   end
 

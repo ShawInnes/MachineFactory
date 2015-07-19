@@ -14,6 +14,11 @@ Vagrant.configure(2) do |config|
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "phusion/ubuntu-14.04-amd64"
 
+  config.vm.hostname = "chefserver.devops"
+
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
@@ -65,7 +70,7 @@ Vagrant.configure(2) do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "baseinstall", type: "shell", inline: <<-SHELL
-    sudo apt-get update
+    ## sudo apt-get update
     sudo dpkg -i /vagrant/packages/chef-server-core_12.1.0-1_amd64.deb 
   SHELL
 
@@ -74,17 +79,15 @@ Vagrant.configure(2) do |config|
   SHELL
 
   config.vm.provision "init", type: "shell", inline: <<-SHELL
-    sudo chef-server-ctl user-create chefadmin "Chef Admin" chefadmin@devopsnirvana.com Password01 --filename chefadmin.pem
-    sudo chef-server-ctl org-create learningchef "Learning Chef" --association chefadmin --filename learningchef-validator.pem
+    sudo chef-server-ctl user-create chefadmin "Chef Admin" chefadmin@chefserver.devops Password01 --filename chefadmin.pem
+    sudo chef-server-ctl org-create chefdemo "Chef Demo" --association chefadmin --filename chefdemo-validator.pem
 
     cp chefadmin.pem /vagrant
-    cp learningchef-validator.pem /vagrant
+    cp chefdemo-validator.pem /vagrant
   SHELL
 
   config.vm.provision "webui", type: "shell", inline: <<-SHELL
-    echo Installing OpsCode Manage...
-    sudo chef-server-ctl install opscode-manage
-
+    sudo sudo chef-server-ctl install opscode-manage
     sudo opscode-manage-ctl reconfigure
     sudo chef-server-ctl reconfigure
   SHELL
