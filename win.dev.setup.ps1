@@ -1,4 +1,3 @@
-
 ## Install Chocolatey
 $webClient=new-object net.webclient
 $webClient.proxy.credentials=[system.net.credentialcache]::defaultnetworkcredentials
