@@ -13,7 +13,7 @@
     "winrm_wait_timeout": "10m",
     "shutdown_timeout": "1h",
     "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
-    "disk_size": 20000,
+    "disk_size": 50000,
     "floppy_files": [
       "windows_2012_r2/Autounattend.xml",
       "scripts/init.bat",
@@ -63,8 +63,23 @@
     ]
   }
   ],
-  "post-processors": [{
+  "post-processors": [
+  {
     "type": "vagrant",
     "output": "../boxes/windows_2012_r2.box"
-  }]
+  },
+  {
+    "type": "vsphere",
+    "disk_mode": "thin",
+    "cluster": "ClusterBuster",
+    "datacenter": "MacBook",
+    "datastore": "datastore1",
+    "resource_pool": "defaultpool",
+    "host": "192.168.16.132",
+    "password": "vmware",
+    "username": "root",
+    "vm_name": "server_2012_r2",
+    "insecure": true
+  }
+  ]
 }

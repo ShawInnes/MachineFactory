@@ -5,5 +5,6 @@ cookbook "devops", path: "cookbooks/devops"
 cookbook "role-baseserver", path: "cookbooks/role-baseserver"
 cookbook "role-octopusserver", path: "cookbooks/role-octopusserver"
 cookbook "role-teamcityagent", path: "cookbooks/role-teamcityagent"
+cookbook "role-developer", path: "cookbooks/role-developer"
 
 cookbook 'octopus',  git: 'https://github.com/Zeroto/octopus-cookbook.git'
