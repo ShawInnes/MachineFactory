@@ -7,6 +7,7 @@
 *.dpx
 *.pem
 
+*.tfstate
 *.nupkg
 
 packages/
