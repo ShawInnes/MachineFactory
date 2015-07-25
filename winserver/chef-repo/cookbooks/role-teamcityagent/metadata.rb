@@ -8,3 +8,4 @@ version          '0.1.0'
 
 depends          'chocolatey'
 depends          'chef-teamcity'
+depends          'nodejs-windows'

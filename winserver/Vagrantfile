@@ -15,6 +15,9 @@ Vagrant.configure(2) do |config|
   config.vm.guest = :windows
   config.vm.communicator = :winrm
 
+  # node.vm.network :forwarded_port,   guest: 3389, host: 3389,       id: "rdp",       auto_correct: true
+  # node.vm.network :forwarded_port,   guest: 5985, host: 5985,       id: "winrm",     auto_correct: true
+
   config.berkshelf.enabled = true
   config.berkshelf.berksfile_path = "chef-repo/Berksfile"
 
@@ -22,9 +25,10 @@ Vagrant.configure(2) do |config|
     v.gui = true
     v.vmx["memsize"] = "2048"
     v.vmx["numvcpus"] = "2"
+
     v.vmx["ethernet0.virtualDev"] = "e1000"
-    v.vmx["ethernet0.connectionType"] = "bridged"
-    v.vmx["ethernet0.startConnected"] = "true"
+    #v.vmx["ethernet0.connectionType"] = "bridged"
+    #v.vmx["ethernet0.startConnected"] = "true"
   end  
 
   if Vagrant.has_plugin?("vagrant-proxyconf")
@@ -60,8 +64,6 @@ Vagrant.configure(2) do |config|
     node.vm.box = "server2012r2_20150725.1"
     node.vm.hostname = "server"
 
-    #node.vm.network :public_network, bridge: "en0"
-
     node.vm.provision "chef", type: "chef_solo" do |chef|
       chef.cookbooks_path    = "chef-repo/cookbooks"
       chef.data_bags_path    = "chef-repo/data_bags"
@@ -74,11 +76,9 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "developer", autostart: true do |node|
     node.vm.box = "server2012r2_20150725.1"
-    node.vm.hostname = "developer.devops"
+    node.vm.hostname = "developer"
 
-    #node.vm.network :forwarded_port,   guest: 3389, host: 3389,       id: "rdp",       auto_correct: false
-    #node.vm.network :forwarded_port,   guest: 5985, host: 5985,       id: "winrm",     auto_correct: false
-    #node.vm.network :public_network, bridge: "en0"
+    node.hostmanager.aliases = %w(developer.devops)
 
     node.vm.provision "chef", type: "chef_solo" do |chef|
       chef.cookbooks_path    = "chef-repo/cookbooks"
@@ -86,6 +86,7 @@ Vagrant.configure(2) do |config|
       chef.environments_path = "chef-repo/environments"
       chef.roles_path        = "chef-repo/roles"
 
+      chef.add_role "baseserver"
       chef.add_role "developer"
     end
   end

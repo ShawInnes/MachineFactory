@@ -4,3 +4,5 @@ metadata
 
 cookbook 'chocolatey', '~> 0.3.0'
 cookbook 'chef-teamcity', '~> 1.0.0'
+cookbook 'nodejs-windows', '~> 0.10.13'
+

@@ -7,6 +7,9 @@
 # All rights reserved - Do Not Redistribute
 #
 
+include_recipe 'nodejs-windows::default'
+
 %w{jre8}.each do |pkg|
   chocolatey pkg
 end
+

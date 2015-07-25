@@ -1,6 +1,7 @@
 source "https://supermarket.chef.io"
 
 cookbook "devops", path: "cookbooks/devops"
+cookbook "sqlserver", path: "cookbooks/sqlserver"
 
 cookbook "role-baseserver", path: "cookbooks/role-baseserver"
 cookbook "role-octopusserver", path: "cookbooks/role-octopusserver"

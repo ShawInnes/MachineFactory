@@ -4,8 +4,38 @@
 #
 # Copyright (c) 2015 The Authors, All Rights Reserved.
 
-mount "I:" do
-  action :mount
-  device "\\\\vmware-host\\Shared Folders"
+windows_feature "IIS-WebServerRole" do
+  action :install
+end
+
+windows_feature "IIS-WebServerManagementTools" do
+  action :install
+end
+
+windows_feature "IIS-ManagementConsole" do
+  action :install
+end
+
+windows_feature "IIS-AspNet45" do
+  action :install
+  all true
+end
+
+windows_feature "IIS-WebServer" do
+  action :install
+  all true
+end
+
+windows_feature "NetFx3" do
+  action :install
+  all true
+end
+
+iis_site 'Default Web Site' do
+  action [:stop, :delete]
+end
+
+%w{ wget git.install }.each do |pkg|
+  chocolatey pkg
 end
 
