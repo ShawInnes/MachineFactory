@@ -75,7 +75,7 @@
     "datacenter": "MacBook",
     "datastore": "datastore1",
     "resource_pool": "defaultpool",
-    "host": "192.168.16.132",
+    "host": "10.0.0.128",
     "password": "vmware",
     "username": "root",
     "vm_name": "server_2012_r2",
