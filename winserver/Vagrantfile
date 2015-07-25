@@ -42,7 +42,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define "octopus", autostart: false do |node|
-    node.vm.box = "windows_2012_r2"
+    node.vm.box = "server2012r2_20150725.1"
     node.vm.hostname = "octopus.devops"
 
     node.vm.provision "chef", type: "chef_solo" do |chef|
@@ -52,12 +52,12 @@ Vagrant.configure(2) do |config|
       chef.roles_path        = "chef-repo/roles"
 
       chef.add_role "octopusserver"
-      chef.add_role "teamcityagent"
+      # chef.add_role "teamcityagent"
     end
   end
 
   config.vm.define "server", autostart: false do |node|
-    node.vm.box = "windows_2012_r2"
+    node.vm.box = "server2012r2_20150725.1"
     node.vm.hostname = "server"
 
     #node.vm.network :public_network, bridge: "en0"
@@ -73,7 +73,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define "developer", autostart: true do |node|
-    node.vm.box = "windows_2012_r2"
+    node.vm.box = "server2012r2_20150725.1"
     node.vm.hostname = "developer.devops"
 
     #node.vm.network :forwarded_port,   guest: 3389, host: 3389,       id: "rdp",       auto_correct: false

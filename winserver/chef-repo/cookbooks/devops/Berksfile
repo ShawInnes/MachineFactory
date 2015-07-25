@@ -5,3 +5,5 @@ metadata
 cookbook 'windows', '~> 1.37.0'
 cookbook 'iis', '~> 4.1.1'
 cookbook 'chocolatey', '~> 0.3.0'
+cookbook 'octopus', '~> 0.1.3'
+cookbook 'windows_firewall', '~> 3.0.0'

@@ -11,12 +11,11 @@ resource "vsphere_virtual_machine" "default" {
     vcpu = 2
     memory = 4096
     disk {
-        datastore = "datastore2"
+        datastore = "datastore1"
         template = "server_2012_r2"
-        size = 12
     }
     
     network_interface {
-        label = "VM Network"
+        label = "Public Network"
     }
 }

@@ -112,6 +112,18 @@
                     <Order>1</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
+                    <CommandLine>DISM.exe /online /enable-feature /featurename:NetFx3</CommandLine>
+                    <Description>Install Netfx3</Description>
+                    <Order>2</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>DISM.exe /online /enable-feature /featurename:NetFx3ServerFeatures</CommandLine>
+                    <Description>Install Netfx3 Server Features</Description>
+                    <Order>3</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c a:\enable-winrm.bat</CommandLine>
                     <Description>Fire-up winrm!</Description>
                     <Order>99</Order>

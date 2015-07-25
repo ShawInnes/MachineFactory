@@ -7,4 +7,4 @@ cookbook "role-octopusserver", path: "cookbooks/role-octopusserver"
 cookbook "role-teamcityagent", path: "cookbooks/role-teamcityagent"
 cookbook "role-developer", path: "cookbooks/role-developer"
 
-cookbook 'octopus',  git: 'https://github.com/Zeroto/octopus-cookbook.git'
+cookbook 'octopus', '~> 0.1.3'

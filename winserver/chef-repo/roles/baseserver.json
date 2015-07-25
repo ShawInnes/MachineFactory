@@ -8,6 +8,7 @@
     "override_attributes": {
     },
     "run_list": [
-        "recipe[role-baseserver]"
+        "recipe[role-baseserver]",
+	"recipe[octopus]"
     ]
 }
