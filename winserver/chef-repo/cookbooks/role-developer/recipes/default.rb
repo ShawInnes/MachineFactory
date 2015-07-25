@@ -35,7 +35,16 @@ iis_site 'Default Web Site' do
   action [:stop, :delete]
 end
 
-%w{ wget git.install }.each do |pkg|
-  chocolatey pkg
+chocolatey "PowerShell" do
+  version "5.0.10105-April2015Preview"
+  action :upgrade
+end
+
+chocolatey "wget" do
+  action :install
+end
+
+chocolatey "git.install" do
+  action :upgrade
 end
 
