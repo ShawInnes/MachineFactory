@@ -1,7 +1,11 @@
 {
+  "variables": {
+    "vmname": "server2012r2_20150725.1"
+  },
+
   "builders": [{
     "type": "vmware-windows-iso",
-    "vm_name": "windows_2012_r2",
+    "vm_name": "{{user `vmname`}}",
     "iso_url": "../../ISO/en_windows_server_2012_r2_with_update_x64_dvd_4065220.iso",
     "iso_checksum": "af6a7f966b4c4e31da5bc3cdc3afcbec",
     "iso_checksum_type": "md5",
@@ -19,7 +23,7 @@
       "scripts/init.bat",
       "scripts/enable-winrm.bat"
     ],
-    "vmdk_name": "windows_server_2012_r2",
+    "vmdk_name": "{{user `vmname`}}",
     "vmx_data": {
       "memsize": "2048",
       "numvcpus": "2",
@@ -66,7 +70,7 @@
   "post-processors": [
   {
     "type": "vagrant",
-    "output": "../boxes/windows_2012_r2.box"
+    "output": "../boxes/{{user `vmname`}}.box"
   },
   {
     "type": "vsphere",
@@ -78,7 +82,8 @@
     "host": "10.0.0.128",
     "password": "vmware",
     "username": "root",
-    "vm_name": "server_2012_r2",
+    "vm_folder": "templates",
+    "vm_name": "{{user `vmname`}}",
     "insecure": true
   }
   ]
