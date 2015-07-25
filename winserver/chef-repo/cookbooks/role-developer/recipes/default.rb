@@ -35,11 +35,6 @@ iis_site 'Default Web Site' do
   action [:stop, :delete]
 end
 
-chocolatey "PowerShell" do
-  version "5.0.10105-April2015Preview"
-  action :upgrade
-end
-
 chocolatey "wget" do
   action :install
 end

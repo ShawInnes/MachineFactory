@@ -45,6 +45,10 @@ Vagrant.configure(2) do |config|
     s.path = "scripts/chocolatey-cache.ps1"
   end
 
+  config.vm.provision "wmf5", type: "shell" do |s|
+    s.path = "scripts/powershell-wmf5.ps1"
+  end
+
   config.vm.define "octopus", autostart: false do |node|
     node.vm.box = "server2012r2_20150725.1"
     node.vm.hostname = "octopus.devops"
