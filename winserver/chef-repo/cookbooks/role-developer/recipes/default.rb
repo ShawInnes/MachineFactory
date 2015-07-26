@@ -40,6 +40,17 @@ chocolatey "wget" do
 end
 
 chocolatey "git.install" do
-  action :upgrade
+  action :install
 end
 
+chocolatey "resharper-platform" do
+  action :install
+end
+
+chocolatey "linqpad" do
+  action :install
+end
+
+chocolatey "intellijidea-ultimate" do
+  action :install
+end
