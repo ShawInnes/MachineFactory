@@ -12,5 +12,5 @@ cookbook 'octopus', '~> 0.1.3'
 
 cookbook "seven_zip", github: "daptiv/seven_zip"
 cookbook "dotnetframework", github: "daptiv/dotnetframework"
-cookbook "visualstudio", github: "TattsGroup/cookbook-visualstudio", branch: "vs2015"
+cookbook "visualstudio", github: "TattsGroup/cookbook-visualstudio"
 
