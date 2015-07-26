@@ -7,6 +7,8 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 
 brew install caskroom/cask/brew-cask
 
+brew install phantomjs
+
 brew cask install vagrant
 
 vagrant plugin install vagrant-vmware-fusion

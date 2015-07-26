@@ -8,6 +8,7 @@
     "override_attributes": {
     },
     "run_list": [
-        "recipe[role-developer]"
+        "recipe[role-developer]",
+	"recipe[visualstudio]"
     ]
 }

@@ -1,4 +1,7 @@
 {
+  "visualstudio": {
+    "source": "c:/Install/"
+  },
   "octopus": {
     "tentacle": {
       "url": "https://download.octopusdeploy.com/octopus/Octopus.Tentacle.3.0.5.2124-x64.msi",
