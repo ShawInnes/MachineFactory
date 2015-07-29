@@ -3,12 +3,10 @@
     "description": "Developer Machine Role",
     "chef_type": "role",
     "json_class": "Chef::Role",
-    "default_attributes": {
-    },
-    "override_attributes": {
-    },
+    "default_attributes": {},
+    "override_attributes": {},
     "run_list": [
         "recipe[role-developer]",
-	"recipe[visualstudio]"
+        "recipe[visualstudio]"
     ]
 }

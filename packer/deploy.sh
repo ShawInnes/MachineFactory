@@ -15,6 +15,7 @@ if echo $VM | grep -q "$VMNAME"; then
 fi
 
 knife vsphere vm clone $VMNAME \
+	--config ./knife.rb \
 	--template "$TEMPLATENAME" \
 	--folder "templates" \
 	--dest-folder "$ENVIRONMENT" \

@@ -6,8 +6,3 @@ description      'Installs/Configures devops'
 long_description 'Installs/Configures devops'
 version          '0.1.2'
 
-depends          'windows'
-depends          'iis'
-depends          'chocolatey'
-depends          'octopus'
-depends          'windows_firewall'

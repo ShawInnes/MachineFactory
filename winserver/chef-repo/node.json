@@ -2,21 +2,6 @@
   "visualstudio": {
     "source": "c:/Install/"
   },
-  "octopus": {
-    "tentacle": {
-      "url": "https://download.octopusdeploy.com/octopus/Octopus.Tentacle.3.0.5.2124-x64.msi",
-      "checksum": "3506ff1bf495cce8933a10531e92079764145b14091807f35f833c421e1b22b6",
-      "role": "webserver",
-      "name": "webserver"
-    },
-    "api": {
-      "uri": "http://10.0.1.51/api",
-      "key": "API-ZVWYPPD55HV5AALOXOVANBOZMU"
-    },
-    "server": {
-      "thumbprint": "F22074CC456CEB845E258824A0B522932B7A6F95"
-    }
-  },
   "run_list": [
 	  "recipe[devops]",
 	  "recipe[octopus::install_tentacle]",
