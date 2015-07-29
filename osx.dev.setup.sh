@@ -10,6 +10,8 @@ brew install caskroom/cask/brew-cask
 brew install phantomjs
 
 brew cask install vagrant
+brew cask install chefdk
+brew cask install packer
 
 vagrant plugin install vagrant-vmware-fusion
 vagrant plugin install vagrant-winrm
@@ -20,11 +22,8 @@ vagrant plugin install vagrant-omnibus
 vagrant plugin install vagrant-berkshelf
 vagrant plugin install vagrant-proxyconf
 
-brew cask install packer
-
 brew install https://raw.githubusercontent.com/packer-community/packer-windows-plugins-brew/master/packer-windows-plugins.rb
 
-brew cask install chefdk
 chef gem install knife-vsphere
 
 # wget -c http://packages.vmware.com/tools/esx/5.5latest/windows/x64/VMware-tools-9.4.12-2627939-x86_64.exe -O packer/tools/VMware-tools-9.4.12-2627939-x86_64.exe
