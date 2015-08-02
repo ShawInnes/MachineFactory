@@ -2,7 +2,6 @@
   "variables": {
     "edition": "2012r2",
     "vmname": "server2012r2",
-    "vmwaretools": "vmware-tools-x86_64.exe",
     "chefwindows": "chef-windows.msi"
   },
   "builders": [{
@@ -23,6 +22,7 @@
     "floppy_files": [
       "answer_files/{{user `edition`}}/Autounattend.xml",
       "scripts/init.bat",
+      "scripts/fixnetwork.ps1",
       "scripts/enable-winrm.bat"
     ],
     "vmdk_name": "{{user `vmname`}}",
@@ -35,38 +35,36 @@
   "provisioners": [
   {
     "type":"powershell",
-    "inline": [
-      "New-Item \\Tools -Type Directory"
-    ]
+    "inline": [ "New-Item \\Tools -Type Directory" ],
+    "except": ["vmware-iso"]
   },
   {
     "type": "file",
     "source": "tools/{{user `vmwaretools`}}",
-    "destination": "\\Tools\\vmware-tools-x86_64.exe"
+    "destination": "\\Tools\\vmware-tools-x86_64.exe",
+    "except": ["vmware-iso"]
   },
   {
     "type": "file",
     "source": "tools/{{user `chefwindows`}}",
-    "destination": "\\Tools\\chef-windows.msi"
+    "destination": "\\Tools\\chef-windows.msi",
+    "except": ["vmware-iso"]
   },
   {
     "type":"powershell",
-    "scripts": [
-      "scripts/vmware-tools.ps1"
-    ]
+    "scripts": [ "scripts/vmware-tools.ps1" ],
+    "except": ["vmware-iso"]
   },
   {
     "pause_before":"3m",
     "type":"powershell",
-    "scripts": [
-      "scripts/chef-windows.ps1"
-    ]
+    "scripts": [ "scripts/chef-windows.ps1" ],
+    "except": ["vmware-iso"]
   },
   {
     "type":"powershell",
-    "scripts": [
-      "scripts/chocolatey.ps1"
-    ]
+    "scripts": [ "scripts/chocolatey.ps1" ],
+    "except": ["vmware-iso"]
   }
   ],
   "post-processors": [

@@ -6,6 +6,7 @@
 *.evtx
 *.dpx
 *.pem
+*.iso
 
 *.tfstate
 *.nupkg
