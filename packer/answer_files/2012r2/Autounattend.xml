@@ -62,7 +62,6 @@
             </ImageInstall>
             <UserData>
                 <!-- Product Key from http://technet.microsoft.com/en-us/library/jj612867.aspx -->
-		<!-— Key below is 2012 R2 Standard KMS client key -—>
                 <ProductKey>
                     <Key>D2N9P-3P6X9-2R39C-7RTCD-MDVJX</Key>
                     <WillShowUI>OnError</WillShowUI>
