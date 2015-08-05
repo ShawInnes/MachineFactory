@@ -1,16 +1,21 @@
-## Install Chocolatey
-$webClient=new-object net.webclient
-$webClient.proxy.credentials=[system.net.credentialcache]::defaultnetworkcredentials
-$webClient.downloadstring('https://chocolatey.org/install.ps1')|iex
+## Install WMF5 or Use Windows 10
 
-choco feature enable -n=allowGlobalConfirmation
+## choco feature enable -n=allowGlobalConfirmation
 
-## this will most likely require a reboot, but it can be deferred until the end
-choco upgrade powershell --pre
+Set-ExecutionPolicy RemoteSigned
+Get-PackageProvider -name Chocolatey -ForceBootstrap
 
+Unregister-PackageSource -Name Chocolatey
+Register-PackageSource -Name Chocolatey -ProviderName Chocolatey -Trusted -Location http://chocolatey.org/api/v2/
 
-## Install Vagrant, Packer and Chef
-choco install vagrant
-choco install packer
-choco install chefdk
+## Install Common Utilities
+Install-Package git.install
+Install-Package notepadplusplus
 
+## Install Vagrant, Packer, Terraform
+Install-Package vagrant
+Install-Package packer
+Install-Package terraform
+
+## Install Chef Development Kit
+Install-Package chefdk

@@ -2,12 +2,10 @@
   "variables": {
     "edition": "2012r2",
     "vmname": "server2012r2",
-    "vmwaretools": "VMware-tools-9.4.12-2627939-x86_64.exe",
-    "chefwindows": "chef-windows-11.18.6-1.windows.msi"
+    "chefwindows": "chef-windows.msi"
   },
-
   "builders": [{
-    "type": "vmware-windows-iso",
+    "type": "vmware-iso",
     "vm_name": "{{user `vmname`}}",
     "iso_url": "../../ISO/en_windows_server_2012_r2_with_update_x64_dvd_4065220.iso",
     "iso_checksum": "af6a7f966b4c4e31da5bc3cdc3afcbec",
@@ -15,15 +13,16 @@
     "guest_os_type": "windows8srv-64",
     "headless": false,
     "boot_wait": "3m",
+    "communicator": "winrm",
     "winrm_username": "packer",
     "winrm_password": "packer",
-    "winrm_wait_timeout": "10m",
     "shutdown_timeout": "1h",
     "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
     "disk_size": 50000,
     "floppy_files": [
       "answer_files/{{user `edition`}}/Autounattend.xml",
       "scripts/init.bat",
+      "scripts/fixnetwork.ps1",
       "scripts/enable-winrm.bat"
     ],
     "vmdk_name": "{{user `vmname`}}",
@@ -36,44 +35,43 @@
   "provisioners": [
   {
     "type":"powershell",
-    "inline": [
-      "New-Item \\Tools -Type Directory"
-    ]
+    "inline": [ "New-Item \\Tools -Type Directory" ],
+    "except": ["vmware-iso"]
   },
   {
     "type": "file",
     "source": "tools/{{user `vmwaretools`}}",
-    "destination": "\\Tools\\vmware-tools-x86_64.exe"
+    "destination": "\\Tools\\vmware-tools-x86_64.exe",
+    "except": ["vmware-iso"]
   },
   {
     "type": "file",
     "source": "tools/{{user `chefwindows`}}",
-    "destination": "\\Tools\\chef-windows.msi"
+    "destination": "\\Tools\\chef-windows.msi",
+    "except": ["vmware-iso"]
   },
   {
     "type":"powershell",
-    "scripts": [
-      "scripts/vmware-tools.ps1"
-    ]
+    "scripts": [ "scripts/vmware-tools.ps1" ],
+    "except": ["vmware-iso"]
   },
   {
     "pause_before":"3m",
     "type":"powershell",
-    "scripts": [
-      "scripts/chef-windows.ps1"
-    ]
+    "scripts": [ "scripts/chef-windows.ps1" ],
+    "except": ["vmware-iso"]
   },
   {
     "type":"powershell",
-    "scripts": [
-      "scripts/chocolatey.ps1"
-    ]
+    "scripts": [ "scripts/chocolatey.ps1" ],
+    "except": ["vmware-iso"]
   }
   ],
   "post-processors": [
   {
     "type": "vagrant",
-    "output": "../boxes/{{user `vmname`}}.box"
+    "output": "../boxes/{{user `vmname`}}.box",
+    "vagrantfile_template": "server2012r2_vagrantfile.template"
   }
   ]
 }

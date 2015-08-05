@@ -6,6 +6,7 @@
 *.evtx
 *.dpx
 *.pem
+*.iso
 
 *.tfstate
 *.nupkg
@@ -15,6 +16,7 @@ trusted_certs/
 
 .DS_Store
 packer_cache/
+packer/output*/
 chocolatey/
 output-vmware-windows-iso/
 *~
