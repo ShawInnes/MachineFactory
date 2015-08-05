@@ -7,10 +7,19 @@
     "vsphere.cluster": "ClusterBuster",
     "vsphere.datacenter": "MacBook",
     "vsphere.datastore": "datastore1",
-    "vsphere.resourcepool": "defaultpool"
+    "vsphere.resourcepool": "defaultpool",
+    "vsphere.host": "10.0.0.128",
+    "vsphere.username": "root",
+    "vsphere.password": "vmware",
+    "vsphere.vm_folder": "templates",
+    "vsphere.vm_network": "Public Network",
+    "esxi.remote_host": "10.0.1.82",
+    "esxi.remote_datastore": "datastore1",
+    "esxi.remote_username": "root",
+    "esxi.remote_password": "vmware123"
   },
   "builders": [{
-    "type": "vmware-windows-iso",
+    "type": "vmware-iso",
     "vm_name": "{{user `vmname`}}",
     "iso_url": "../../ISO/en_windows_server_2012_r2_with_update_x64_dvd_4065220.iso",
     "iso_checksum": "af6a7f966b4c4e31da5bc3cdc3afcbec",
@@ -18,6 +27,11 @@
     "guest_os_type": "windows8srv-64",
     "headless": false,
     "boot_wait": "3m",
+    "remote_type": "esx5",
+    "remote_host": "{{user `esxi.remote_host`}}",
+    "remote_datastore": "{{user `esxi.remote_datastore`}}",
+    "remote_username": "{{user `esxi.remote_username`}}",
+    "remote_password": "{{user `esxi.remote_password`}}",
     "winrm_username": "packer",
     "winrm_password": "packer",
     "winrm_wait_timeout": "10m",
@@ -37,41 +51,6 @@
     }
   }],
   "provisioners": [
-  {
-    "type":"powershell",
-    "inline": [
-      "New-Item \\Tools -Type Directory"
-    ]
-  },
-  {
-    "type": "file",
-    "source": "tools/{{user `vmwaretools`}}",
-    "destination": "\\Tools\\vmware-tools-x86_64.exe"
-  },
-  {
-    "type": "file",
-    "source": "tools/{{user `chefwindows`}}",
-    "destination": "\\Tools\\chef-windows.msi"
-  },
-  {
-    "type":"powershell",
-    "scripts": [
-      "scripts/vmware-tools.ps1"
-    ]
-  },
-  {
-    "pause_before":"3m",
-    "type":"powershell",
-    "scripts": [
-      "scripts/chef-windows.ps1"
-    ]
-  },
-  {
-    "type":"powershell",
-    "scripts": [
-      "scripts/chocolatey.ps1"
-    ]
-  }
   ],
   "post-processors": [
   {
@@ -80,18 +59,19 @@
   },
   {
     "type": "vsphere",
-    "disk_mode": "thin",
+    "vm_name": "{{user `vmname`}}",
     "cluster": "{{user `vsphere.cluster`}}",
     "datacenter": "{{user `vsphere.datacenter`}}",
     "datastore": "{{user `vsphere.datastore`}}",
     "resource_pool": "{{user `vsphere.resourcepool`}}",
-    "host": "10.0.0.128",
-    "password": "vmware",
-    "username": "root",
-    "vm_folder": "templates",
-    "vm_name": "{{user `vmname`}}",
-    "vm_network": "Public Network",
-    "insecure": true
+    "host": "{{user `vsphere.host`}}",
+    "password": "{{user `vsphere.password`}}",
+    "username": "{{user `vsphere.username`}}",
+    "vm_folder": "{{user `vsphere.vm_folder`}}",
+    "vm_network": "{{user `vsphere.vm_network`}}",
+    "disk_mode": "thin",
+    "insecure": true,
+    "except": ["vmware-iso"]
   }
   ]
 }

@@ -1,8 +1,11 @@
 #!/bin/sh
 
+BASENAME="W2012R2_RTM_Standard_VL"
 EDITION="2012r2"
-VMVER="20150729.$EDITION.2"
-VMNAME="server$EDITION_$VMVER"
+VMVER=`date "+%Y%m%d-%H%M"`
+VMNAME="$BASENAME_$EDITION_$VMVER"
+
+echo $VMNAME
 
 PATH=$PATH:"/Applications/VMware Fusion.app/Contents/Library/VMware OVF Tool"
 
