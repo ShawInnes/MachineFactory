@@ -1,0 +1,10 @@
+
+ssh root@10.0.1.82
+
+vim-cmd hostsvc/enable_ssh
+vim-cmd hostsvc/start_ssh
+esxcli system settings advanced set -o /Net/GuestIPHack -i 1
+
+vim-cmd vmsvc/getallvms
+
+open 'vmrc://@10.0.1.82:443/?moid=14'

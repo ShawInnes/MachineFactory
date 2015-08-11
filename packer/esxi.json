@@ -14,7 +14,7 @@
     "vsphere.vm_folder": "templates",
     "vsphere.vm_network": "Public Network",
     "esxi.remote_host": "10.0.1.82",
-    "esxi.remote_datastore": "datastore1",
+    "esxi.remote_datastore": "esxdatastore",
     "esxi.remote_username": "root",
     "esxi.remote_password": "vmware123"
   },
@@ -47,7 +47,8 @@
     "vmx_data": {
       "memsize": "2048",
       "numvcpus": "2",
-      "scsi0.virtualDev": "lsisas1068"
+      "scsi0.virtualDev": "lsisas1068",
+      "ethernet0.networkName": "Public Network"
     }
   }],
   "provisioners": [
@@ -55,7 +56,8 @@
   "post-processors": [
   {
     "type": "vagrant",
-    "output": "../boxes/{{user `vmname`}}-{{isotime \"20060102-030405\"}}.box"
+    "output": "../boxes/{{user `vmname`}}-{{isotime \"20060102-030405\"}}.box",
+    "except": ["vmware-iso"]
   },
   {
     "type": "vsphere",
