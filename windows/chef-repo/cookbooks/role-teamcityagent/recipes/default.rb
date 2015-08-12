@@ -8,7 +8,6 @@
 #
 
 # include_recipe 'nodejs-windows::default'
-# include_recipe 'nodejs-windows::default'
 
 include_recipe "chef-teamcity::windows_agent"
 
@@ -18,3 +17,5 @@ windows_firewall_rule 'TeamCity Agent' do
   dir :in
   firewall_action :allow
 end
+
+include_recipe 'nodejs-windows::default'

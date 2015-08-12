@@ -1,16 +1,11 @@
 source "https://supermarket.chef.io"
 
-cookbook "devops", path: "cookbooks/devops"
-cookbook "sqlserver", path: "cookbooks/sqlserver"
-
 cookbook "role-baseserver", path: "cookbooks/role-baseserver"
 cookbook "role-octopusserver", path: "cookbooks/role-octopusserver"
 cookbook "role-teamcityagent", path: "cookbooks/role-teamcityagent"
 cookbook "role-developer", path: "cookbooks/role-developer"
 
-cookbook "seven_zip", github: "daptiv/seven_zip"
-cookbook "dotnetframework", github: "daptiv/dotnetframework"
+# cookbook "seven_zip", github: "daptiv/seven_zip"
+# cookbook "dotnetframework", github: "daptiv/dotnetframework"
 
-cookbook 'octopus', github: "TattsGroup/octopus-cookbook", branch: "certificate_if_blank"
-
-cookbook "visualstudio", github: "TattsGroup/cookbook-visualstudio"
+# cookbook 'octopus', github: "TattsGroup/cookbook-octopus", branch: "certificate_if_blank"

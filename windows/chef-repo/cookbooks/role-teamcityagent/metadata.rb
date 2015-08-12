@@ -13,3 +13,5 @@ depends          'java'
 
 depends          'chef-teamcity'
 depends          'nodejs-windows'
+
+depends          'visualstudio'
