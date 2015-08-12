@@ -7,4 +7,4 @@ cookbook "role-developer", path: "cookbooks/role-developer"
 
 cookbook 'octopus', github: "TattsGroup/cookbook-octopus", branch: "certificate_if_blank"
 
-cookbook "visualstudio", github: "TattsGroup/cookbook-visualstudio", branch: "remove_sevenzip"
+cookbook "visualstudio", github: "TattsGroup/cookbook-visualstudio"
