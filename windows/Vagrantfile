@@ -45,7 +45,7 @@ Vagrant.configure(2) do |config|
     node.hostmanager.aliases = %w(buildagent.devops)
 
     ## this makes things easier, but it's not useful for future proofing
-    ## node.vm.synced_folder "~/ISO/", "/Install"
+    ## node.vm.synced_folder "~/Desktop/ISO/", "/Install"
 
     node.vm.provision "chef", type: "chef_solo" do |chef|
       chef.cookbooks_path    = "chef-repo/cookbooks"
@@ -64,9 +64,9 @@ Vagrant.configure(2) do |config|
       chef.json = {
         :java => {
           :windows => {
-            :url => "http://10.0.1.59:8080/jre-8u51-windows-x64.exe",
+            :url => "http://10.0.1.59/jre-8u51-windows-x64.exe",
             :checksum => "3895872bc4cdfb7693c227a435cf6740f968e4fa6ce0f7449e6a074e3e3a0f01",
-            :package_name => "Java(TM) SE Development Kit 8 (64-bit)"
+            :package_name => "Java 8 Update 51 (64-bit)"
           }
         },
         :teamcity => {
@@ -78,6 +78,11 @@ Vagrant.configure(2) do |config|
             :temp_dir => "c:/teamcity/temp"
           }
         },
+#        :git => {
+#          :version => "1.9.5-preview20150319",
+#          :url => "http://10.0.1.59/Git-1.9.5-preview20150319/Git-1.9.5-preview20150319.exe",
+#          :checksum => "40e48bd7af1fa9e3e937ca03f9ea3ac28fe3acd94013530d3d24259a306df220",
+#        },
         :octopus => {
           :tentacle => {
             :url => "https://download.octopusdeploy.com/octopus/Octopus.Tentacle.3.0.12.2366-x64.msi",

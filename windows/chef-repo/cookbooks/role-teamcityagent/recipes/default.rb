@@ -10,7 +10,7 @@
 # include_recipe 'nodejs-windows::default'
 # include_recipe 'nodejs-windows::default'
 
-include_recipe "chef-teamcity::agent"
+include_recipe "chef-teamcity::windows_agent"
 
 windows_firewall_rule 'TeamCity Agent' do
   localport '9090'
