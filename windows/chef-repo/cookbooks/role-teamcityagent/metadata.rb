@@ -6,6 +6,10 @@ description      'Installs/Configures role-teamcityagent'
 long_description 'Installs/Configures role-teamcityagent'
 version          '0.1.0'
 
-depends          'chocolatey'
+depends          'windows'
+depends          'windows_firewall'
+
+depends          'java'
+
 depends          'chef-teamcity'
 depends          'nodejs-windows'

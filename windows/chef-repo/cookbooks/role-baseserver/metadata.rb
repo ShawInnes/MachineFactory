@@ -5,7 +5,3 @@ license          'all_rights'
 description      'Installs/Configures role-baseserver'
 long_description 'Installs/Configures role-baseserver'
 version          '0.1.0'
-
-depends          'windows'
-depends          'octopus'
-depends          'windows_firewall'

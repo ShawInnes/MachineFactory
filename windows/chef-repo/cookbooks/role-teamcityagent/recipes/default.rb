@@ -7,9 +7,14 @@
 # All rights reserved - Do Not Redistribute
 #
 
-include_recipe 'nodejs-windows::default'
+# include_recipe 'nodejs-windows::default'
+# include_recipe 'nodejs-windows::default'
 
-%w{jre8}.each do |pkg|
-  chocolatey pkg
+include_recipe "chef-teamcity::agent"
+
+windows_firewall_rule 'TeamCity Agent' do
+  localport '9090'
+  protocol 'TCP'
+  dir :in
+  firewall_action :allow
 end
-

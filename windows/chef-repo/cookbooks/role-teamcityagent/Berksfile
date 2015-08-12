@@ -2,7 +2,11 @@ source "https://supermarket.chef.io"
 
 metadata
 
-cookbook 'chocolatey', '~> 0.3.0'
-cookbook 'chef-teamcity', '~> 1.0.0'
-cookbook 'nodejs-windows', '~> 0.10.13'
+cookbook 'windows', '~> 1.37.0'
+cookbook 'windows_firewall', '~> 3.0.0'
 
+cookbook 'java', '~> 1.35.0'
+
+cookbook 'chef-teamcity', '~> 1.0.0'
+
+cookbook 'nodejs-windows', '~> 0.10.13'

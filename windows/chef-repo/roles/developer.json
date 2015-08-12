@@ -6,7 +6,6 @@
     "default_attributes": {},
     "override_attributes": {},
     "run_list": [
-        "recipe[role-developer]",
-        "recipe[visualstudio]"
+        "recipe[role-developer]"
     ]
 }
