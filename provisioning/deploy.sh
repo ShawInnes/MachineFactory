@@ -1,3 +1,3 @@
 #!/bin/sh
 
-chef-client -z linux.rb
+chef-client -z windows.rb

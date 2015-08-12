@@ -12,7 +12,7 @@ options = {
     'winrm.guest_port' => 5985,
     'winrm.username' => 'packer',
     'winrm.password' => 'packer',
-    'vm.box' => 'server2012r2_20150725.1',
+    'vm.box' => 'windows-2012r2-20150811',
     'vm.guest' => :windows,
     'vm.communicator' => :winrm
   }
