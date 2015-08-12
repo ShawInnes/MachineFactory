@@ -12,6 +12,6 @@ depends          'windows_firewall'
 depends          'java'
 
 depends          'chef-teamcity'
-depends          'nodejs-windows'
 
+depends          'nodejs-windows'
 depends          'visualstudio'

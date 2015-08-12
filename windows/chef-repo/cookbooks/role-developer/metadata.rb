@@ -9,3 +9,6 @@ version          '0.1.1'
 depends          'windows'
 depends          'iis'
 depends          'chocolatey'
+
+depends          'nodejs-windows'
+depends          'visualstudio'

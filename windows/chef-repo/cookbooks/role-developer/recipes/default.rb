@@ -4,53 +4,36 @@
 #
 # Copyright (c) 2015 The Authors, All Rights Reserved.
 
-windows_feature "IIS-WebServerRole" do
-  action :install
+## Install Visual Studio
+include_recipe 'visualstudio::default'
+include_recipe 'chocolatey'
+
+%w{ IIS-WebServerRole IIS-WebServerManagementTools IIS-ManagementConsole }.each do |feat|
+  windows_feature feat do
+    action :install
+  end
 end
 
-windows_feature "IIS-WebServerManagementTools" do
-  action :install
-end
-
-windows_feature "IIS-ManagementConsole" do
-  action :install
-end
-
-windows_feature "IIS-AspNet45" do
-  action :install
-  all true
-end
-
-windows_feature "IIS-WebServer" do
-  action :install
-  all true
-end
-
-windows_feature "NetFx3" do
-  action :install
-  all true
+%w{ NetFx3 IIS-AspNet45 IIS-WebServer }.each do |feat|
+  windows_feature feat do
+    action :install
+    all true
+  end
 end
 
 iis_site 'Default Web Site' do
   action [:stop, :delete]
 end
 
-chocolatey "wget" do
-  action :install
+%w{ wget git.install resharper-platform linqpad }.each do |pkg|
+  chocolatey pkg do
+    action :install
+  end
 end
 
-chocolatey "git.install" do
-  action :install
-end
-
-chocolatey "resharper-platform" do
-  action :install
-end
-
-chocolatey "linqpad" do
-  action :install
-end
-
-chocolatey "intellijidea-ultimate" do
-  action :install
+windows_package "JetBrains Products in Visual Studio 2015" do
+  source "#{ENV['programdata']}\\chocolatey\\lib\\resharper-platform\\ReSharperAndToolsPacked01Update1.exe"
+  installer_type :custom
+  options "/SpecificProductNames=ReSharper;dotTrace;dotCover;dotMemory;dotPeek;ReSharperPlatformVs14 /VsVersion=0;14 /Silent=True"
+  timeout 600
 end

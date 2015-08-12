@@ -15,6 +15,8 @@ Vagrant.configure(2) do |config|
   config.vm.guest = :windows
   config.vm.communicator = :winrm
 
+  config.omnibus.chef_version = '12.4.1'
+
   config.berkshelf.enabled = true
   config.berkshelf.berksfile_path = "chef-repo/Berksfile"
 
@@ -53,6 +55,7 @@ Vagrant.configure(2) do |config|
       chef.roles_path        = "chef-repo/roles"
 
       chef.add_role "teamcityagent"
+      chef.add_role "developer"
 
       # chef.add_recipe "octopus::install_tentacle"
       # chef.add_recipe "octopus::create_environment"

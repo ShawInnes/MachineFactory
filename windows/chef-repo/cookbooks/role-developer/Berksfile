@@ -5,3 +5,7 @@ metadata
 cookbook 'windows', '~> 1.37.0'
 cookbook 'iis', '~> 4.1.1'
 cookbook 'chocolatey', '~> 0.3.0'
+
+cookbook 'nodejs-windows', '~> 0.10.13'
+
+cookbook "visualstudio", github: "TattsGroup/cookbook-visualstudio"

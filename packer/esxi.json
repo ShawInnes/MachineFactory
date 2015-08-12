@@ -2,8 +2,8 @@
   "variables": {
     "edition": "2012r2",
     "vmname": "server2012r2",
-    "vmwaretools": "VMware-tools-9.4.12-2627939-x86_64.exe",
-    "chefwindows": "chef-windows-11.18.6-1.windows.msi",
+    "vmwaretools": "~/ISO/VMware-tools-9.4.12-2627939-x86_64.exe",
+    "chefclient": "~/ISO/chef-client-12.4.1-1.msi",
     "vsphere.cluster": "ClusterBuster",
     "vsphere.datacenter": "MacBook",
     "vsphere.datastore": "datastore1",
