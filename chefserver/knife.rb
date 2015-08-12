@@ -8,5 +8,3 @@ validation_key           "#{current_dir}/chefdemo-validator.pem"
 chef_server_url          "https://chefserver.devops/organizations/chefdemo"
 cache_type               'BasicFile'
 cache_options( :path => "#{ENV['HOME']}/.chef/checksums" )
-cookbook_path            ["#{current_dir}/../cookbooks"]
-
