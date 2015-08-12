@@ -5,7 +5,6 @@ cookbook "role-octopusserver", path: "cookbooks/role-octopusserver"
 cookbook "role-teamcityagent", path: "cookbooks/role-teamcityagent"
 cookbook "role-developer", path: "cookbooks/role-developer"
 
-# cookbook "seven_zip", github: "daptiv/seven_zip"
-# cookbook "dotnetframework", github: "daptiv/dotnetframework"
+cookbook 'octopus', github: "TattsGroup/cookbook-octopus", branch: "certificate_if_blank"
 
-# cookbook 'octopus', github: "TattsGroup/cookbook-octopus", branch: "certificate_if_blank"
+cookbook "visualstudio", github: "TattsGroup/cookbook-visualstudio", branch: "remove_sevenzip"

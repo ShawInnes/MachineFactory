@@ -11,4 +11,4 @@ cookbook 'chef-teamcity', '~> 1.0.0'
 
 cookbook 'nodejs-windows', '~> 0.10.13'
 
-cookbook "visualstudio", github: "TattsGroup/cookbook-visualstudio"
+cookbook "visualstudio", github: "TattsGroup/cookbook-visualstudio", branch: "remove_sevenzip"
