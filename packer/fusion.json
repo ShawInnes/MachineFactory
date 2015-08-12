@@ -8,7 +8,7 @@
   "builders": [{
     "type": "vmware-iso",
     "vm_name": "{{user `vmname`}}",
-    "iso_url": "../../ISO/en_windows_server_2012_r2_with_update_x64_dvd_4065220.iso",
+    "iso_url": "~/ISO/en_windows_server_2012_r2_with_update_x64_dvd_4065220.iso",
     "iso_checksum": "af6a7f966b4c4e31da5bc3cdc3afcbec",
     "iso_checksum_type": "md5",
     "guest_os_type": "windows8srv-64",
