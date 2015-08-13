@@ -112,14 +112,9 @@
                     <Order>1</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>DISM.exe /online /enable-feature /featurename:NetFx3</CommandLine>
+                    <CommandLine>DISM.exe /online /enable-feature /featurename:NetFx3 /all</CommandLine>
                     <Description>Install Netfx3</Description>
                     <Order>2</Order>
-                </SynchronousCommand>
-                <SynchronousCommand wcm:action="add">
-                    <CommandLine>DISM.exe /online /enable-feature /featurename:NetFx3ServerFeatures</CommandLine>
-                    <Description>Install Netfx3 Server Features</Description>
-                    <Order>3</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>start /wait %SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe -File A:\fixnetwork.ps1</CommandLine>
