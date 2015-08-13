@@ -1,13 +1,14 @@
 ---
 driver:
   name: vagrant
+  gui: true
+  provider: vmware_fusion
 
 provisioner:
   name: chef_zero
 
 platforms:
-  - name: ubuntu-12.04
-  - name: centos-6.5
+  - name: windows-2012r2-20150812
 
 suites:
   - name: default
