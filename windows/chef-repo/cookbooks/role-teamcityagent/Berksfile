@@ -1,4 +1,4 @@
-source "https://supermarket.chef.io"
+source 'https://supermarket.chef.io'
 
 metadata
 
@@ -11,4 +11,4 @@ cookbook 'chef-teamcity', '~> 1.0.0'
 
 cookbook 'nodejs-windows', '~> 0.10.13'
 
-cookbook "visualstudio", github: "TattsGroup/cookbook-visualstudio"
+cookbook 'visualstudio', git: 'https://github.com/TattsGroup/cookbook-visualstudio'
