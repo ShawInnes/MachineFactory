@@ -78,6 +78,9 @@ Vagrant.configure(2) do |config|
             :temp_dir => "c:/teamcity/temp"
           }
         },
+        :sqlserver => {
+          :source => "http://10.0.1.59"
+        },
         :visualstudio => {
           :source => "http://10.0.1.59"
         },

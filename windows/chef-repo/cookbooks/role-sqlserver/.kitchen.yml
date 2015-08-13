@@ -14,4 +14,4 @@ suites:
   - name: default
     run_list:
       - recipe[role-sqlserver::default]
-    attributes:
+    attributes: { sqlserver: { source: "http://10.0.1.59" } }
