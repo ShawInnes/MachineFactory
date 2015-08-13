@@ -54,10 +54,10 @@ Vagrant.configure(2) do |config|
       chef.data_bags_path    = "chef-repo/data_bags"
       chef.roles_path        = "chef-repo/roles"
 
-      chef.add_role "teamcityagent"
+      # chef.add_role "teamcityagent"
       chef.add_role "developer"
 
-      # chef.add_recipe "octopus::install_tentacle"
+      # chef.add_recipe "powershell::powershell5"
       # chef.add_recipe "octopus::create_environment"
       # chef.add_recipe "octopus::register_tentacle"
 
@@ -84,9 +84,25 @@ Vagrant.configure(2) do |config|
         :nodejs => {
           :url => "http://10.0.1.59/node-v0.12.7-x86.msi"
         },
+        :runtime => {
+          :vc2013 {
+            :url => "http://10.0.1.59/vc_redis.2013.x64.exe",
+            :checksum => "e554425243e3e8ca1cd5fe550db41e6fa58a007c74fad400274b128452f38fb8"
+          },
+          :vc2105 {
+            :url => "http://10.0.1.59/vc_redis.2015.x64.exe",
+            :checksum => "5eea714e1f22f1875c1cb7b1738b0c0b1f02aec5ecb95f0fdb1c5171c6cd93a3"
+          }
+        },
+        :powershell => {
+          :powershell5 => {
+            :url => "http://10.0.1.59/WindowsBlue-KB3037315-x64.msu",
+            :checksum => "9a24de7b85fae96a87188a7fdaab27da3bc90d89426594cdc5f962234a61b7bd"
+          }
+        },
         :octopus => {
           :tentacle => {
-            :url => "https://download.octopusdeploy.com/octopus/Octopus.Tentacle.3.0.12.2366-x64.msi",
+            :url => "http://10.0.1.59/Octopus.Tentacle.3.0.12.2366-x64.msi",
             :checksum => "8503e00959e21feec72c84e6a245e6a59c3775d14d2fc1ce07e64c8d5a5eafea",
             :environment => "development",
             :role => "api",

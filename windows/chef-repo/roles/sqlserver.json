@@ -1,11 +1,11 @@
 {
-    "name": "baseserver",
-    "description": "Base Server Role",
+    "name": "sqlserver",
+    "description": "Sql Server Role",
     "chef_type": "role",
     "json_class": "Chef::Role",
     "default_attributes": {},
     "override_attributes": {},
     "run_list": [
-        "recipe[role-baseserver]"
+        "recipe[role-sqlserver]"
     ]
 }
