@@ -36,12 +36,12 @@ powershell_script "Install #{node['sqlserver'][edition]['package_name']}" do
     Mount-DiskImage -ImagePath $ImagePath
     $DriveLetter = (Get-DiskImage -ImagePath $ImagePath | Get-Volume).DriveLetter
     $Command = "${DriveLetter}:\\#{node['sqlserver'][edition]['installer_file']}"
-    $ArgList = "/q /ConfigurationFile=#{config_file_path}"
+    $ArgList = "/q /ConfigurationFile=#{config_file_path} /IAcceptSQLServerLicenseTerms"
     Start-Process -FilePath $Command -ArgumentList $ArgList -Wait
     Dismount-DiskImage -ImagePath $ImagePath
 	Exit 0
   EOH
   returns [0, 1]
-  guard_interpreter :powershell_script
+  not_if { Dir.exists?(node['sqlserver']['install_dir']) }
   #notifies :reboot_now, 'reboot[Restart Computer]', :immediately
 end

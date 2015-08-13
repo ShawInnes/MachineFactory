@@ -9,13 +9,9 @@ ACTION="Install"
 
 ENU="True"
 
-; Parameter that controls the user interface behavior. Valid values are Normal for the full UI,AutoAdvance for a simplied UI, and EnableUIOnServerCore for bypassing Server Core setup GUI block.
-
-UIMODE="Normal"
-
 ; Setup will not display any user interface.
 
-QUIET="False"
+QUIET="True"
 
 ; Setup will display progress only, without any user interaction.
 
@@ -23,7 +19,7 @@ QUIETSIMPLE="False"
 
 ; Specify whether SQL Server Setup should discover and include product updates. The valid values are True and False or 1 and 0. By default SQL Server Setup will include updates that are found.
 
-UpdateEnabled="True"
+UpdateEnabled="False"
 
 ; Specify if errors can be reported to Microsoft to improve future SQL Server releases. Specify 1 or True to enable and 0 or False to disable this feature.
 

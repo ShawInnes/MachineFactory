@@ -37,7 +37,7 @@ describe 'role-sqlserver::default' do
     end
 
     it 'executes powershell script' do
-       expect(chef_run).to run_powershell_script('Install Microsoft SQL Server 2014')
+       expect(chef_run).to run_powershell_script('Install Microsoft SQL Server 2014 (64-bit)')
     end
   end
 end
