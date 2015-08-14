@@ -6,4 +6,6 @@ include_recipe 'role-teamcityagent::visualstudio'
 
 include_recipe 'role-teamcityagent::nodejs'
 
+include_recipe 'role-teamcityagent::python'
+
 include_recipe 'role-teamcityagent::teamcity'
