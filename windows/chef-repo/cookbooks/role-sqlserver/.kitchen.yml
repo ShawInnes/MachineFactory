@@ -8,7 +8,6 @@ provisioner:
   name: chef_zero
 
 platforms:
-  - name: windows-2012r2-20150812
   - name: windows-2012r2-20150813
 
 suites:
