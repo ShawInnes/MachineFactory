@@ -9,6 +9,7 @@ provisioner:
 
 platforms:
   - name: windows-2012r2-20150812
+  - name: windows-2012r2-20150813
 
 suites:
   - name: default
