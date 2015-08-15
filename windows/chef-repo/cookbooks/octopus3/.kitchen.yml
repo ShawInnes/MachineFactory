@@ -11,10 +11,6 @@ platforms:
   - name: windows-2012r2-20150813
 
 suites:
-  - name: default
-    run_list:
-      - recipe[octopus3::default]
-    attributes:
   - name: server
     run_list:
       - recipe[octopus3::server]
@@ -24,8 +20,18 @@ suites:
           connectionstring: "Data Source=10.0.1.93;Initial Catalog=OctopusDeploy;Integrated Security=True"
           admin_user: "packer"
       sqlserver:
-        source: "http://172.20.10.10"
+        source: "http://10.0.1.59"
   - name: tentacle
     run_list:
       - recipe[octopus3::tentacle]
     attributes:
+      octopus:
+        api:
+          url: "http://10.0.1.89/api"
+          key: "API-MDVAVSM6OYVBEORDCKLVGZZNUO"
+        server:
+          url: "http://10.0.1.89"
+          thumbprint: "ACC5880A119A7FBCA4899D1562ED1E52876C9E1A"
+        tentacle:
+          environment: "Kitchen"
+          role: "webserver"

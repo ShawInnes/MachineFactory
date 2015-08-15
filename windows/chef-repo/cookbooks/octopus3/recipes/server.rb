@@ -4,8 +4,6 @@
 #
 # Copyright (c) 2015 Shaw Innes, All Rights Reserved.
 
-::Chef::Recipe.send(:include, Windows::Helper)
-
 windows_zipfile node['octopus']['tools']['install_dir'] do
   source node['octopus']['tools']['url']
   checksum node['octopus']['tools']['checksum']
@@ -99,7 +97,7 @@ powershell_script 'Configure License File' do
   guard_interpreter :powershell_script
   code <<-EOH
     & "#{octopus_exe}" license --console `
-                --instance "OctopusServer" `
+                --instance "#{node['octopus']['server']['name']}" `
                 --licenseBase64 "#{node['octopus']['server']['base64license']}"
   EOH
   only_if { node['octopus']['server']['base64license'] }

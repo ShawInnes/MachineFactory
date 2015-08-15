@@ -4,3 +4,4 @@ metadata
 
 cookbook 'windows'
 cookbook 'windows_firewall'
+cookbook 'powershell'
