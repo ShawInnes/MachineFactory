@@ -36,8 +36,17 @@ describe 'role-sqlserver::default' do
        expect(chef_run).to render_file(File.join(Chef::Config[:file_cache_path], 'ConfigurationFile.ini'))
     end
 
-    it 'executes powershell script' do
+    it 'execute powershell installation script' do
        expect(chef_run).to run_powershell_script('Install Microsoft SQL Server 2014 (64-bit)')
+    end
+
+    it 'create firewall rule' do
+      expect(chef_run).to create_windows_firewall_rule('SQL Server')
+                            .with(
+                              localport: '1433',
+                              protocol: 'TCP',
+                              dir: :in,
+                              firewall_action: :allow)
     end
   end
 end

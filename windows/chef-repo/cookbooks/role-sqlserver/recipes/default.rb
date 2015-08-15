@@ -45,3 +45,10 @@ powershell_script "Install #{node['sqlserver'][edition]['package_name']}" do
   not_if { Dir.exists?(node['sqlserver']['install_dir']) }
   #notifies :reboot_now, 'reboot[Restart Computer]', :immediately
 end
+
+windows_firewall_rule 'SQL Server' do
+  localport '1433'
+  protocol 'TCP'
+  dir :in
+  firewall_action :allow
+end
