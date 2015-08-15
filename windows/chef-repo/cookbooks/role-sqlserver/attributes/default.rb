@@ -1,3 +1,5 @@
+# default['sqlserver']['source'] = nil
+
 # Set this attribute to the version of sql server you wish to install
 default['sqlserver']['version'] = '2015'
 
