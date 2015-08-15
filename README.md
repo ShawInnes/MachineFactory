@@ -30,6 +30,38 @@ role-sqlserver::default
 
 ```
 
+## Trick to getting Kitchen YAML working on VMWare Fusion
+
+```
+driver:
+  name: vagrant
+  gui: true
+  provider: vmware_fusion
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: windows-2012r2-20150813
+```
+
+## Trick to getting ServerSpec working for Windows
+```
+require 'serverspec'
+
+if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM).nil?
+  set :backend, :exec
+else
+  set :backend, :cmd
+  set :os, family: 'windows'
+end
+```
+
+## To execute
+
+```
+rspec --color --format documentation spec/unit/recipes/default_spec.rb
+```
 
 ## Test Kitchen Run
 

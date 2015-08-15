@@ -1,0 +1,31 @@
+---
+driver:
+  name: vagrant
+  gui: true
+  provider: vmware_fusion
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: windows-2012r2-20150813
+
+suites:
+  - name: default
+    run_list:
+      - recipe[octopus3::default]
+    attributes:
+  - name: server
+    run_list:
+      - recipe[octopus3::server]
+    attributes:
+      octopus:
+        server:
+          connectionstring: "Data Source=10.0.1.93;Initial Catalog=OctopusDeploy;Integrated Security=True"
+          admin_user: "packer"
+      sqlserver:
+        source: "http://172.20.10.10"
+  - name: tentacle
+    run_list:
+      - recipe[octopus3::tentacle]
+    attributes:
