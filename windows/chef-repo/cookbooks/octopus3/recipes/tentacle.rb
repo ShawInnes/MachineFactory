@@ -21,20 +21,17 @@ end
 tentacle_exe = File.join(node['octopus']['tentacle']['install_dir'], 'Tentacle.exe')
 tentacle_config = File.join(node['octopus']['tentacle']['home'], 'Tentacle.config')
 
-powershell_script 'Create Tentacle Instance' do
-  guard_interpreter :powershell_script
-  code <<-EOH
-    & "#{tentacle_exe}" create-instance --console --instance \"#{ node['octopus']['tentacle']['name'] }\" --config \"#{ tentacle_config }\"
-  EOH
-  not_if <<-EOH
-    Test-Path "#{tentacle_config}"
-  EOH
+remote_directory "#{ENV['PROGRAMW6432']}\\WindowsPowerShell\\Modules\\OctopusDSC" do
+  source 'OctopusDSC'
+  action :create
 end
 
-=begin
-dsc_script 'install tentacle' do
-  imports 'cTentacleAgent'
+dsc_script 'OctopusTentacle' do
+  imports 'OctopusDSC'
+
   code <<-EOH
+    #Import-DscResource -ModuleName OctopusDSC
+
     cTentacleAgent OctopusTentacle
     {
         Ensure = "Present";
@@ -47,83 +44,11 @@ dsc_script 'install tentacle' do
         OctopusServerUrl = "#{node['octopus']['server']['url']}";
         Environments = @("#{node['octopus']['tentacle']['environment']}");
         Roles = @("#{node['octopus']['tentacle']['role']}");
+        IPAddress = "#{node['ipaddress']}";
 
         # Optional settings
         ListenPort = #{node['octopus']['server']['listen_port']};
         DefaultApplicationDirectory = "#{node['octopus']['tentacle']['applications']}"
     }
   EOH
-end
-=end
-
-powershell_script 'Configure Certificate' do
-  guard_interpreter :powershell_script
-  flags '-NoLogo, -NonInteractive, -ExecutionPolicy RemoteSigned, -InputFormat None, -File'
-  code <<-EOH
-    & "#{tentacle_exe}" new-certificate --console `
-                --instance \"#{node['octopus']['tentacle']['name']}\" `
-                --if-blank
-  EOH
-  returns [0]
-end
-
-powershell_script 'Reset Trust' do
-  guard_interpreter :powershell_script
-  code <<-EOH
-    & "#{tentacle_exe}" configure --console `
-                --instance "#{node['octopus']['tentacle']['name']}" `
-                --reset-trust
-  EOH
-  returns [0, 100]
-end
-
-powershell_script 'Configure Tentacle' do
-  guard_interpreter :powershell_script
-  code <<-EOH
-    & "#{tentacle_exe}" configure --console `
-                --instance "#{node['octopus']['tentacle']['name']}" `
-                --home "#{node['octopus']['tentacle']['home']}" `
-                --app "#{node['octopus']['tentacle']['applications']}" `
-                --port "#{node['octopus']['tentacle']['listen_port']}" `
-                --noListen "False"
-  EOH
-  returns [0, 100]
-end
-
-powershell_script 'Establish Trust' do
-  guard_interpreter :powershell_script
-  code <<-EOH
-    & "#{tentacle_exe}" configure --console `
-                --instance "#{node['octopus']['tentacle']['name']}" `
-                --trust "#{node['octopus']['server']['thumbprint']}"
-  EOH
-  returns [0, 100]
-end
-
-powershell_script 'Install and Start Service' do
-  guard_interpreter :powershell_script
-  code <<-EOH
-    & "#{tentacle_exe}" service --console `
-                --instance "#{node['octopus']['tentacle']['name']}" `
-                --install `
-                --start
-  EOH
-  returns [0, 100]
-end
-
-powershell_script 'Register with Octopus Server' do
-  guard_interpreter :powershell_script
-  code <<-EOH
-    & "#{tentacle_exe}" register-with --console `
-                --instance "#{node['octopus']['tentacle']['name']}" `
-                --server "#{node['octopus']['server']['url']}" `
-                --name "#{node['hostname']}" `
-                --publicHostName "#{node['ipaddress']}" `
-                --apiKey "#{node['octopus']['api']['key']}" `
-                --server-comms-port "#{node['octopus']['server']['listen_port']}" `
-                --force `
-                --environment "#{node['octopus']['tentacle']['environment']}" `
-                --role "#{node['octopus']['tentacle']['role']}"
-  EOH
-  returns [0, 100]
 end
