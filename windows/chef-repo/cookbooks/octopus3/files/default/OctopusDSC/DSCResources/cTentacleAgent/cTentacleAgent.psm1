@@ -101,11 +101,17 @@ function Set-TargetResource
     {
         Remove-TentacleRegistration -name $Name -apiKey $ApiKey -octopusServerUrl $OctopusServerUrl
     }
-    elseif ($Ensure -eq "Present" -and $currentResource["Ensure"] -eq "Absent")
+    elseif ($Ensure -eq "Present") ##  -and $currentResource["Ensure"] -eq "Absent"
     {
         Write-Verbose "Installing Tentacle..."
         New-Tentacle -name $Name -apiKey $ApiKey -octopusServerUrl $OctopusServerUrl -ipAddress $IPAddress -port $ListenPort -environments $Environments -roles $Roles -DefaultApplicationDirectory $DefaultApplicationDirectory
         Write-Verbose "Tentacle installed!"
+    }
+
+    if ($Ensure -eq "Present") {
+      Write-Verbose "Registering Tentacle..."
+      Register-Tentacle -name $Name -apiKey $ApiKey -octopusServerUrl $OctopusServerUrl -ipAddress $IPAddress -environments $Environments -roles $Roles
+      Write-Verbose "Tentacle registered!"
     }
 
     if ($State -eq "Started" -and $currentResource["State"] -eq "Stopped")
@@ -183,6 +189,58 @@ function Invoke-AndAssert {
     }
 }
 
+function Register-Tentacle
+{
+    param (
+        [Parameter(Mandatory=$True)]
+        [string]$name,
+        [Parameter(Mandatory=$True)]
+        [string]$apiKey,
+        [Parameter(Mandatory=$True)]
+        [string]$octopusServerUrl,
+        [Parameter(Mandatory=$True)]
+        [string]$ipAddress,
+        [Parameter(Mandatory=$True)]
+        [string[]]$environments,
+        [Parameter(Mandatory=$True)]
+        [string[]]$roles
+    )
+
+    if ($port -eq 0)
+    {
+        $port = 10933
+    }
+
+    pushd "${env:ProgramFiles}\Octopus Deploy\Tentacle"
+
+    $registerArguments = @("register-with", "--instance", $name, "--server", $octopusServerUrl, "--name", $env:COMPUTERNAME, "--publicHostName", $ipAddress, "--apiKey", $apiKey, "--comms-style", "TentaclePassive", "--force", "--console")
+
+    foreach ($environment in $environments)
+    {
+        foreach ($e2 in $environment.Split(','))
+        {
+            $registerArguments += "--environment"
+            $registerArguments += $e2.Trim()
+        }
+    }
+    foreach ($role in $roles)
+    {
+        foreach ($r2 in $role.Split(','))
+        {
+            $registerArguments += "--role"
+            $registerArguments += $r2.Trim()
+        }
+    }
+
+    Write-Verbose "Registering with arguments: $registerArguments"
+
+    Invoke-AndAssert { & .\tentacle.exe ($registerArguments) }
+
+    popd
+
+    Write-Verbose "Tentacle registration commands complete"
+}
+
 function New-Tentacle
 {
     param (
@@ -207,7 +265,7 @@ function New-Tentacle
         $port = 10933
     }
 
-    Write-Verbose "Configuring and registering Tentacle"
+    Write-Verbose "Configuring Tentacle"
 
     pushd "${env:ProgramFiles}\Octopus Deploy\Tentacle"
 
@@ -218,33 +276,11 @@ function New-Tentacle
     Invoke-AndAssert { & .\tentacle.exe configure --instance $name --home $tentacleHomeDirectory --console }
     Invoke-AndAssert { & .\tentacle.exe configure --instance $name --app $tentacleAppDirectory --console }
     Invoke-AndAssert { & .\tentacle.exe configure --instance $name --port $port --console }
-    Invoke-AndAssert { & .\tentacle.exe new-certificate --instance $name --console }
+    Invoke-AndAssert { & .\tentacle.exe new-certificate --instance $name --if-blank --console }
     Invoke-AndAssert { & .\tentacle.exe service --install --instance $name --console }
 
-    $registerArguments = @("register-with", "--instance", $name, "--server", $octopusServerUrl, "--name", $env:COMPUTERNAME, "--publicHostName", $ipAddress, "--apiKey", $apiKey, "--comms-style", "TentaclePassive", "--force", "--console")
-
-    foreach ($environment in $environments)
-    {
-        foreach ($e2 in $environment.Split(','))
-        {
-            $registerArguments += "--environment"
-            $registerArguments += $e2.Trim()
-        }
-    }
-    foreach ($role in $roles)
-    {
-        foreach ($r2 in $role.Split(','))
-        {
-            $registerArguments += "--role"
-            $registerArguments += $r2.Trim()
-        }
-    }
-
-    Write-Verbose "Registering with arguments: $registerArguments"
-    Invoke-AndAssert { & .\tentacle.exe ($registerArguments) }
-
     popd
-    Write-Verbose "Tentacle commands complete"
+    Write-Verbose "Tentacle configuration commands complete"
 }
 
 function Remove-TentacleRegistration
@@ -264,7 +300,13 @@ function Remove-TentacleRegistration
         Write-Verbose "Beginning Tentacle deregistration"
         Write-Verbose "Tentacle commands complete"
         pushd $tentacleDir
-        Invoke-AndAssert { & .\tentacle.exe deregister-from --instance "$name" --server $octopusServerUrl --apiKey $apiKey --console }
+
+        & .\tentacle.exe deregister-from --instance "$name" --server $octopusServerUrl --apiKey $apiKey --console
+
+        Invoke-AndAssert {
+          & .\tentacle.exe delete-instance --instance "$name" --console
+        }
+
         popd
     }
     else

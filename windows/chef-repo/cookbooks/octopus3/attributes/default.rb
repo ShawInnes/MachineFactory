@@ -9,8 +9,8 @@ default['octopus']['tentacle']['home'] = "C:\\Octopus"
 default['octopus']['tentacle']['applications'] = "C:\\Octopus\\Applications"
 default['octopus']['tentacle']['name'] = "Tentacle"
 
-default['octopus']['tentacle']['environment'] = "test"
-default['octopus']['tentacle']['role'] = "test"
+default['octopus']['tentacle']['environments'] = "test"
+default['octopus']['tentacle']['roles'] = "test"
 
 default['octopus']['tools']['url'] = "https://download.octopusdeploy.com/octopus-tools/2.5.4.35/OctopusTools.2.5.4.35.zip"
 default['octopus']['tools']['checksum'] = "2c1411583e5a8ba60b92b04c56e69dc9a3ee850d0ff9305ddd0187806b91f282"
@@ -38,7 +38,7 @@ default['octopus']['server']['service_user'] = "#{node['hostname']}\\packer"
 default['octopus']['server']['service_password'] = "packer"
 
 default['octopus']['server']['thumbprint'] = nil
-default['octopus']['server']['url'] = "http://test.octopusdeploy.com/"
+default['octopus']['server']['address'] = "http://test.octopusdeploy.com/"
 
 default['octopus']['api']['url'] = "http://test.octopusdeploy.com/api"
 default['octopus']['api']['key'] = nil

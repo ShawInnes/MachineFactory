@@ -18,12 +18,36 @@ windows_firewall_rule 'Octopus Tentacle' do
   firewall_action :allow
 end
 
-tentacle_exe = File.join(node['octopus']['tentacle']['install_dir'], 'Tentacle.exe')
-tentacle_config = File.join(node['octopus']['tentacle']['home'], 'Tentacle.config')
-
 remote_directory "#{ENV['PROGRAMW6432']}\\WindowsPowerShell\\Modules\\OctopusDSC" do
   source 'OctopusDSC'
   action :create
+end
+
+dsc_script 'OctopusTentacle Remove' do
+  imports 'OctopusDSC'
+
+  code <<-EOH
+    #Import-DscResource -ModuleName OctopusDSC
+
+    cTentacleAgent OctopusTentacle
+    {
+        Ensure = "Absent";
+        State = "Stopped";
+
+        Name = "#{node['octopus']['tentacle']['name']}";
+
+        # Registration - all parameters required
+        ApiKey = "#{node['octopus']['api']['key']}";
+        OctopusServerUrl = "#{node['octopus']['server']['address']}";
+        IPAddress = "#{node['ipaddress']}";
+        Environments = @(#{node['octopus']['tentacle']['environments']});
+        Roles = @(#{node['octopus']['tentacle']['roles']});
+
+        # Optional settings
+        ListenPort = #{node['octopus']['tentacle']['listen_port']};
+        DefaultApplicationDirectory = "#{node['octopus']['tentacle']['applications']}"
+    }
+  EOH
 end
 
 dsc_script 'OctopusTentacle' do
@@ -41,13 +65,13 @@ dsc_script 'OctopusTentacle' do
 
         # Registration - all parameters required
         ApiKey = "#{node['octopus']['api']['key']}";
-        OctopusServerUrl = "#{node['octopus']['server']['url']}";
-        Environments = @("#{node['octopus']['tentacle']['environment']}");
-        Roles = @("#{node['octopus']['tentacle']['role']}");
+        OctopusServerUrl = "#{node['octopus']['server']['address']}";
         IPAddress = "#{node['ipaddress']}";
+        Environments = @(#{node['octopus']['tentacle']['environments']});
+        Roles = @(#{node['octopus']['tentacle']['roles']});
 
         # Optional settings
-        ListenPort = #{node['octopus']['server']['listen_port']};
+        ListenPort = #{node['octopus']['tentacle']['listen_port']};
         DefaultApplicationDirectory = "#{node['octopus']['tentacle']['applications']}"
     }
   EOH
