@@ -6,5 +6,5 @@ cookbook "role-teamcityagent", path: "cookbooks/role-teamcityagent"
 cookbook "role-developer", path: "cookbooks/role-developer"
 cookbook "role-sqlserver", path: "cookbooks/role-sqlserver"
 
-cookbook 'octopus', git: "https://github.com/TattsGroup/cookbook-octopus", branch: "certificate_if_blank"
 cookbook "visualstudio", git: "https://github.com/TattsGroup/cookbook-visualstudio"
+cookbook "octopus", git: "https://github.com/TattsGroup/cookbook-octopus3"
