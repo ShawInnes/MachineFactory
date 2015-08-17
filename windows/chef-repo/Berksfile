@@ -8,3 +8,4 @@ cookbook "role-sqlserver", path: "cookbooks/role-sqlserver"
 
 cookbook "visualstudio", git: "https://github.com/TattsGroup/cookbook-visualstudio"
 cookbook "octopus", git: "https://github.com/TattsGroup/cookbook-octopus3"
+cookbook "sqlserver2014", git: "https://github.com/TattsGroup/cookbook-sqlserver2014"
