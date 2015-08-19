@@ -6,4 +6,4 @@ description 'Installs/Configures role-sqlserver'
 long_description 'Installs/Configures role-sqlserver'
 version '0.1.0'
 
-depends 'windows'
+depends "sqlserver2014"
