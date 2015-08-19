@@ -14,6 +14,10 @@ windows_firewall_rule 'TeamCity Agent' do
   firewall_action :allow
 end
 
+windows_registry 'HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings' do
+  values 'ProxyEnable' => 0
+end
+
 directory node['teamcity']['agent']['work_dir'] do
   :create
   rights :full_control, 'Everyone', applies_to_children: true

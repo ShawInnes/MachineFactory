@@ -4,6 +4,6 @@ maintainer_email 'shaw@immortal.net.au'
 license 'All rights reserved'
 description 'Installs/Configures Octopus Deploy Server'
 long_description 'Installs/Configures Octopus Deploy Server'
-version '0.1.1'
+version '0.2.0'
 
 depends 'chocolatey'

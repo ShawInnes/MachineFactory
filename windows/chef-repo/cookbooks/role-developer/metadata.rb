@@ -4,7 +4,7 @@ maintainer_email 'shaw@immortal.net.au'
 license 'All rights reserved'
 description 'Installs/Configures Developer Machine'
 long_description 'Installs/Configures Developer Machine'
-version '0.1.1'
+version '0.2.0'
 
 depends 'windows'
 depends 'iis'
