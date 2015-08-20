@@ -1,4 +1,3 @@
-
 # Survival beyond the DMZ
 
 ```
