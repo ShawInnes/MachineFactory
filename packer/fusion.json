@@ -5,7 +5,9 @@
     "vmwaretools": "../../../ISO/VMware-tools-9.4.12-2627939-x86_64.exe",
     "chefclient": "../../../ISO/chef-client-12.4.1-1.msi"
   },
-  "builders": [{
+  "builders": 
+  [
+  {
     "type": "vmware-iso",
     "vm_name": "{{user `vmname`}}",
     "iso_url": "../../../ISO/en_windows_server_2012_r2_with_update_x64_dvd_4065220.iso",
@@ -32,7 +34,51 @@
       "numvcpus": "2",
       "scsi0.virtualDev": "lsisas1068"
     }
-  }],
+  },
+  {
+    "type": "virtualbox-iso",
+    "vm_name": "{{user `vmname`}}",
+    "iso_url": "../../../ISO/en_windows_server_2012_r2_with_update_x64_dvd_4065220.iso",
+    "iso_checksum": "af6a7f966b4c4e31da5bc3cdc3afcbec",
+    "iso_checksum_type": "md5",
+    "guest_os_type": "Windows2012_64",
+    "headless": false,
+    "boot_wait": "3m",
+    "communicator": "winrm",
+    "winrm_username": "packer",
+    "winrm_password": "packer",
+    "shutdown_timeout": "1h",
+    "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+    "disk_size": 50000,
+    "floppy_files": [
+      "answer_files/{{user `edition`}}/Autounattend.xml",
+      "scripts/init.bat",
+      "scripts/fixnetwork.ps1",
+      "scripts/enable-winrm.bat"
+    ],
+    "hard_drive_interface": "sata",
+    "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "1536"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "1"
+        ],
+        [
+          "setextradata",
+          "{{.Name}}",
+          "VBoxInternal/CPUM/CMPXCHG16B",
+          "1"
+        ]
+      ]
+  }
+  ],
   "provisioners": [
   {
     "type":"powershell",
@@ -41,7 +87,8 @@
   {
     "type": "file",
     "source": "{{user `vmwaretools`}}",
-    "destination": "\\Tools\\vmware-tools-x86_64.exe"
+    "destination": "\\Tools\\vmware-tools-x86_64.exe",
+    "only": ["vmware-iso"]
   },
   {
     "type": "file",
@@ -50,7 +97,8 @@
   },
   {
     "type":"powershell",
-    "scripts": [ "scripts/vmware-tools.ps1" ]
+    "scripts": [ "scripts/vmware-tools.ps1" ],
+    "only": ["vmware-iso"]
   },
   {
     "pause_before":"3m",
@@ -61,7 +109,7 @@
   "post-processors": [
   {
     "type": "vagrant",
-    "output": "../boxes/{{user `vmname`}}-{{isotime \"20060102-030405\"}}.box",
+    "output": "../boxes/{{.Provider}}/{{user `vmname`}}-{{isotime \"20060102-030405\"}}.box",
     "vagrantfile_template": "server2012r2_vagrantfile.template"
   }
   ]
