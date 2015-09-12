@@ -24,5 +24,5 @@ if echo $VM | grep -q "$VMNAME"; then
   exit 0
 fi
 
-packer build -var "vmname=$VMNAME" -var "edition=$EDITION" server2012r2_vsphere.json
+packer build -var "vmname=$VMNAME" -var "edition=$EDITION" packer.json
 
