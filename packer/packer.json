@@ -128,6 +128,12 @@
             "{{.Name}}",
             "VBoxInternal/CPUM/CMPXCHG16B",
             "1"
+          ],
+          [
+            "modifyvm",
+            "{{.Name}}",
+            "--natpf1",
+            "guestwinrm,tcp,127.0.0.1,5985,,5985"
           ]
         ]
     }
@@ -144,14 +150,14 @@
       "only": ["vmware", "esx"]
     },
     {
-      "type":"powershell",
-      "scripts": [ "scripts/vmware-tools.ps1" ],
-      "only": ["vmware", "esx"]
-    },
-    {
       "type": "file",
       "source": "{{user `chefclient`}}",
       "destination": "\\Tools\\chef-windows.msi"
+    },
+    {
+      "type":"powershell",
+      "scripts": [ "scripts/vmware-tools.ps1" ],
+      "only": ["vmware", "esx"]
     },
     {
       "pause_before":"3m",
