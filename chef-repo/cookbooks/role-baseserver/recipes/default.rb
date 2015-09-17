@@ -9,4 +9,5 @@ windows_firewall_rule 'Octopus Deploy' do
   protocol 'TCP'
   dir :in
   firewall_action :allow
+  #  action :create
 end
